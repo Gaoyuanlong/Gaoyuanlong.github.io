@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Git-flow使用笔记">
+<meta property="og:url" content="http://yoursite.com/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/Git-flow%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="L&#39;s blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-22T08:12:32.000Z">
+<meta property="article:modified_time" content="2020-11-22T04:38:13.366Z">
+<meta property="article:author" content="L">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/Git-flow%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Git-flow使用笔记 | L's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">L's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-series">
+
+    <a href="/series/" rel="section"><i class="fa fa-fw fa-reorder"></i>专题</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/Git-flow%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="L">
+      <meta itemprop="description" content="记录生活，技术共享">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git-flow使用笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-22 08:12:32" itemprop="dateCreated datePublished" datetime="2020-03-22T08:12:32+00:00">2020-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-22 04:38:13" itemprop="dateModified" datetime="2020-11-22T04:38:13+00:00">2020-11-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+            <div class="post-description"> </div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Git-flow 使用笔记<br>2012-03-12</p>
+<p>git-flow 原理：A successful Git branching model，两篇不错的中文翻译： Git开发管理之道，一个成功的Git分支模型。</p>
+<p>简单来说，git-flow 就是在 git branch git tag基础上封装出来的代码分支管理模型，把实际开发模拟成 master develop feature release hotfix support 几种场景，其中 master 对应发布上线，develop 对应开发，其他几个在不同的情况下出现。通过封装，git-flow 屏蔽了 git branch 等相对来说比较复杂生硬的命令(git branch 还是比较复杂的，尤其是在多分支情况下)，简单而且规范的解决了代码分支管理问题。</p>
+<p>安装 git-flow:</p>
+<p>1<br>brew install git-flow<br>在一个全新目录下构建 git-flow 模型：</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br> git flow init<br>Initialized empty Git repository in /Users/fannheyward/flowTest/.git/<br>No branches exist yet. Base branches must be created now.<br>Branch name for production releases: [master]<br>Branch name for “next release” development: [develop] </p>
+<p>How to name your supporting branch prefixes?<br>Feature branches? [feature/]<br>Release branches? [release/]<br>Hotfix branches? [hotfix/]<br>Support branches? [support/]<br>Version tag prefix? []<br>或者在现有的版本库构建：</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br> git flow init<br>Which branch should be used for bringing forth production releases?</p>
+<ul>
+<li>master<br>Branch name for production releases: [master]<br>Branch name for “next release” development: [develop] </li>
+</ul>
+<p>How to name your supporting branch prefixes?<br>Feature branches? [feature/]<br>Release branches? [release/]<br>Hotfix branches? [hotfix/]<br>Support branches? [support/]<br>Version tag prefix? []<br>中间会询问生成的分支名，直接回车默认。这样一个 git-flow 分支模型就初始化完成。</p>
+<p>使用场景一：新功能开发，代号 f1</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br> git flow feature start f1<br>Switched to a new branch ‘feature/f1’</p>
+<p>Summary of actions:</p>
+<ul>
+<li>A new branch ‘feature/f1’ was created, based on ‘develop’</li>
+<li>You are now on branch ‘feature/f1’</li>
+</ul>
+<p>Now, start committing on your feature. When done, use:</p>
+<pre><code>git flow feature finish f1</code></pre><p>git-flow 从 develop 分支创建了一个新的分支 feature/f1，并自动切换到这个分支下面。然后就可以进行 f1 功能开发，中间可以多次的 commit 操作。当功能完成后：</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br> git flow feature finish f1<br>Switched to branch ‘develop’<br>Already up-to-date.<br>Deleted branch feature/f1 (was 7bb5749).</p>
+<p>Summary of actions:</p>
+<ul>
+<li>The feature branch ‘feature/f1’ was merged into ‘develop’</li>
+<li>Feature branch ‘feature/f1’ has been removed</li>
+<li>You are now on branch ‘develop’<br>feature/f1 分支的代码会被合并到 develop 里面，然后删除该分支，切换回 develop. 到此，新功能开发这个场景完毕。在 f1 功能开发中，如果 f1 未完成，同时功能 f2 要开始进行，也是可以的。</li>
+</ul>
+<p>使用场景二：发布上线，代号 0.1</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br> git flow release start 0.1<br>Switched to a new branch ‘release/0.1’</p>
+<p>Summary of actions:</p>
+<ul>
+<li>A new branch ‘release/0.1’ was created, based on ‘develop’</li>
+<li>You are now on branch ‘release/0.1’</li>
+</ul>
+<p>Follow-up actions:</p>
+<ul>
+<li><p>Bump the version number now!</p>
+</li>
+<li><p>Start committing last-minute fixes in preparing your release</p>
+</li>
+<li><p>When done, run:</p>
+<p>   git flow release finish ‘0.1’<br>git-flow 从 develop 分支创建一个新的分支 release/0.1，并切换到该分支下，接下来要做的就是修改版本号等发布操作。完成后：</p>
+</li>
+</ul>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br> git flow release finish 0.1<br>Switched to branch ‘master’<br>Merge made by the ‘recursive’ strategy.<br> f1      |    1 +<br> version |    1 +<br> 2 files changed, 2 insertions(+)<br> create mode 100644 f1<br> create mode 100644 version<br>Switched to branch ‘develop’<br>Merge made by the ‘recursive’ strategy.<br> version |    1 +<br> 1 file changed, 1 insertion(+)<br> create mode 100644 version<br>Deleted branch release/0.1 (was d77df80).</p>
+<p>Summary of actions:</p>
+<ul>
+<li>Latest objects have been fetched from ‘origin’</li>
+<li>Release branch has been merged into ‘master’</li>
+<li>The release was tagged ‘0.1’</li>
+<li>Release branch has been back-merged into ‘develop’</li>
+<li>Release branch ‘release/0.1’ has been deleted<br>git-flow 会依次切换到 master develop 下合并 release/0.1 里的修改，然后用 git tag 的给当次发布打上 tag 0.1，可以通过 git tag 查看所有 tag：</li>
+</ul>
+<p>1<br>2<br>3<br> git:(master) git tag<br>0.1<br>0.2<br>使用场景三：紧急 bug 修正，代号 bug1</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br> git flow hotfix start bug1<br>Switched to a new branch ‘hotfix/bug1’</p>
+<p>Summary of actions:</p>
+<ul>
+<li>A new branch ‘hotfix/bug1’ was created, based on ‘master’</li>
+<li>You are now on branch ‘hotfix/bug1’</li>
+</ul>
+<p>Follow-up actions:</p>
+<ul>
+<li><p>Bump the version number now!</p>
+</li>
+<li><p>Start committing your hot fixes</p>
+</li>
+<li><p>When done, run:</p>
+<p>   git flow hotfix finish ‘bug1’<br>git-flow 从 master 分支创建一个新的分支 hotfix/bug1，并切换到该分支下。接下来要做的就是修复 bug，完成后：</p>
+</li>
+</ul>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br> git flow hotfix finish bug1<br>Switched to branch ‘master’<br>Merge made by the ‘recursive’ strategy.<br> f1 |    2 +-<br> 1 file changed, 1 insertion(+), 1 deletion(-)<br>Switched to branch ‘develop’<br>Merge made by the ‘recursive’ strategy.<br> f1 |    2 +-<br> 1 file changed, 1 insertion(+), 1 deletion(-)<br>Deleted branch hotfix/bug1 (was aa3ca2e).</p>
+<p>Summary of actions:</p>
+<ul>
+<li>Latest objects have been fetched from ‘origin’</li>
+<li>Hotfix branch has been merged into ‘master’</li>
+<li>The hotfix was tagged ‘bug1’</li>
+<li>Hotfix branch has been back-merged into ‘develop’</li>
+<li>Hotfix branch ‘hotfix/bug1’ has been deleted<br>git-flow 会依次切换到 master develop 分支下合并 hotfix/bug1，然后删掉 hotfix/bug1。到此，hotfix 完成。</li>
+</ul>
+<p>git-flow 的 feature release 都是从 develop 分支创建，hotfix support 都是从 master 分支创建。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/flow%E5%B7%A5%E4%BD%9C%E6%B5%81/" rel="prev" title="flow工作流">
+      <i class="fa fa-chevron-left"></i> flow工作流
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/Commit%20message%20%E5%92%8C%20Change%20log%20%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97/" rel="next" title="Commit message 和 Change log 编写指南">
+      Commit message 和 Change log 编写指南 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">L</p>
+  <div class="site-description" itemprop="description">记录生活，技术共享</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">L</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">59k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">53 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

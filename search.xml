@@ -1,0 +1,1452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>lattice-planning-and-EM-planning</title>
+    <url>/2020/03/21/%E6%8A%80%E6%9C%AF/%E8%A7%84%E5%88%92/lattice-planning-and-EM-planning/</url>
+    <content><![CDATA[<h1 id="lattice-planning"><a href="#lattice-planning" class="headerlink" title="lattice planning"></a>lattice planning</h1><hr>
+<h2 id="SL"><a href="#SL" class="headerlink" title="SL"></a>SL</h2><p>固定D<del>s</del> 和D<del>L</del> 。。</p>
+<p>S采样数点为m, L采样点数为n<br>拟合出m*n条</p>
+<h2 id="ST"><a href="#ST" class="headerlink" title="ST"></a>ST</h2><p>固定D<del>T</del> 和D<del>V</del><br>T采样点： 0、1、2、3、4、5、6、7、8<br>V采样点:0、1/6V<del>U</del>、2/6V<del>U</del> … (V<del>U</del> 为给定速度)<br>S采样点的计算: S= V<em>T<br>S采样点数为j，等于V采样点数，T采样点数为k<br>拟合出j\</em>k条</p>
+<p>m*n和j*k两两匹配算cost，既有m*n*j*k条轨迹，得到最小cost轨迹</p>
+<h1 id="EM-planning"><a href="#EM-planning" class="headerlink" title="EM planning"></a>EM planning</h1><hr>
+<h2 id="SL-1"><a href="#SL-1" class="headerlink" title="SL"></a>SL</h2><p>固定D<del>s</del> 和D<del>L</del><br>S采样数为m, L采样数为n<br>动态规划算cost<br>根据上周期ST算cost，得到最小cost轨迹</p>
+<h2 id="ST-1"><a href="#ST-1" class="headerlink" title="ST"></a>ST</h2><p>固定D<del>T</del> 和D<del>V</del><br>T采样点： 0、1、2、3、4、5、6、7、8<br>V采样点为在当前车速v基础上加减，有上下限<br>S采样点的计算: S = 1/2*a*t^2 + v*t （S根据最大车速和加速度设置上限）<br>S采样点数为j，等于V采样点数，T采样点数为k<br>动态规划算cost<br>根据本周期的SL算cost，得到最小cost轨迹</p>
+<p>SL最优轨迹和ST最优轨迹组合，得到最终的最优轨迹</p>
+]]></content>
+      <categories>
+        <category>规划</category>
+        <category>apollo</category>
+      </categories>
+      <tags>
+        <tag>planner</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo-next-搭建</title>
+    <url>/2020/03/21/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/hexo/hexo-next-%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p><a href="https://www.jianshu.com/p/3a05351a37dc" target="_blank" rel="noopener">https://www.jianshu.com/p/3a05351a37dc</a><br><a href="https://www.cnblogs.com/penglei-it/p/hexo_next_baseset.html" target="_blank" rel="noopener">https://www.cnblogs.com/penglei-it/p/hexo_next_baseset.html</a><br><a href="https://zhuanlan.zhihu.com/p/30836436" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30836436</a><br><a href="http://www.mdslq.cn/archives/40609c5b.html" target="_blank" rel="noopener">http://www.mdslq.cn/archives/40609c5b.html</a><br><a href="https://sunfove.xyz/archives/ec7d7221.html" target="_blank" rel="noopener">https://sunfove.xyz/archives/ec7d7221.html</a></p>
+<p>自动部署：<br><a href="https://www.cnblogs.com/g00gle/p/11701295.html" target="_blank" rel="noopener">https://www.cnblogs.com/g00gle/p/11701295.html</a></p>
+<p>域名绑定：<br><a href="https://blog.csdn.net/wgshun616/article/details/81019739" target="_blank" rel="noopener">https://blog.csdn.net/wgshun616/article/details/81019739</a></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>hexo</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>/etc/ld.so.conf详解</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/linux/etc-ld-so-conf%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p>etc/ld.so.conf 此文件记录了编译时使用的动态库的路径，也就是加载so库的路径。<br>默认情况下，编译器只会使用/lib和/usr/lib这两个目录下的库文件，而通常通过源码包进行安装时，如果不<br>指定–prefix会将库安装在/usr/local目录下，而又没有在文件/etc/ld.so.conf中添加/usr/local/lib这个目录&gt;。这样虽然安装了源码包，但是使用时仍然找不到相关的.so库，就会报错。也就是说系统不知道安装了源码包。<br>    对于此种情况有2种解决办法：<br>（1）在用源码安装时，用–prefix指定安装路径为/usr/lib。这样的话也就不用配置PKG_CONFIG_PATH<br>  (2) 直接将路径/usr/local/lib路径加入到文件/etc/ld.so.conf文件的中。在文件/etc/ld.so.conf中末尾直接添加：/usr/local/lib（这个方法给力！）</p>
+<p>ldconfig<br>再来看看ldconfig这个程序，位于/sbin下，它的作用是将文件/etc/ld.so.conf列出的路径下的库文件缓存到/etc/ld.so.cache以供使用，因此当安装完一些库文件，或者修改/etc/ld.so.conf增加了库的新的搜索路径，需要运&gt;行一下ldconfig，使所有的库文件都被缓存到文件/etc/ld.so.cache中，如果没做，可能会找不到刚安装的库。</p>
+<p>PKG_CONFIG_PATH：<br>最后说下PKG_CONFIG_PATH这个环境变量，它是在安装了pkg-config后出现的<br>其实pkg-config就是向configure程序提供系统信息的程序，比如软件的版本啦，库的版本啦，库的路径啦，等等<br>这些信息只是在编译其间使用。你可以 ls /usr/lib/pkgconfig 下，会看到许多的*.pc,用文本编辑器打开<br>会发现类似下面的信息：<br>prefix=/usr<br>.<br>.<br>.<br>所以要正确配置这个环境变量，我的配置是：PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>美文1</title>
+    <url>/2020/03/22/%E7%94%9F%E6%B4%BB/%E7%BE%8E%E6%96%871/</url>
+    <content><![CDATA[<p>在此我爱你。<br>风在幽暗的松林里解开自己。<br>月亮在游荡的水上发出磷光。<br>同样的日子相互追逐纠缠。</p>
+<p>雾气散开成舞蹈的形体。<br>一只银色的海鸥从西天滑落。<br>有时一片帆。高高，高高在上的星星。</p>
+<p>或者一条船的黑色十字。<br>孤独的。<br>有时清晨醒来，连我的灵魂也是湿的。<br>海远远地发声，又发声。<br>这是港口。<br>在此我爱你。</p>
+<p>在此我爱你，而地平线徒劳地将你遮掩。<br>置身这些冰冷的东西中我依然爱你。<br>有时我的吻登上那些沉重的船只<br>由海上驶向无法到达的地方。</p>
+<p>我看见自己如那些旧锚般被遗忘。<br>当黄昏靠岸，码头格外悲伤。<br>我的生命已倦，毫无成效的饥饿。<br>我爱我没有的东西。你如此遥远。<br>我的厌烦与缓慢的暮色搏斗着。<br>但夜来临，并开始对我歌唱。</p>
+<p>月亮转动它梦的圆盘。<br>最大的那些星星藉你的眼睛望着我。<br>而因为我爱你，风中的松树<br>要用它们的针叶歌唱你的名。<br>——《在此我爱你》聂鲁达</p>
+<p>如果有来生，要做一棵树，<br>站成永恒，没有悲欢的姿势。<br>一半在尘土里安详，<br>一半在风里飞扬；<br>一半洒落荫凉，<br>一半沐浴阳光。<br>非常沉默、非常骄傲。<br>从不依靠、从不寻找。<br>如果有来生，要化成一阵风，<br>一瞬间也能成为永恒。<br>没有善感的情怀，没有多情的眼睛。<br>一半在雨里洒脱，<br>一半在春光里旅行；<br>寂寞了，孤自去远行，<br>把淡淡的思念统统带走，<br>从不思念、从不爱恋；<br>如果有来生，要做一只鸟，<br>飞越永恒，没有迷途的苦恼。<br>东方有火红的希望，<br>南方有温暖的巢床，<br>向西逐退残阳，向北唤醒芬芳。<br>如果有来生，<br>希望每次相遇，<br>都能化为永恒。<br>——三毛《如果有来生》</p>
+<p>我多么希望，有一个门口<br>早晨，阳光照在草上<br>我们站着<br>扶着自己的门扇<br>门很低，但太阳是明亮的<br>草在结它的种子<br>风在摇它的叶子<br>我们站着，不说话<br>就十分美好<br>有门，不用开开<br>是我们的，就十分美好<br>早晨，黑夜还要流浪<br>我们把六弦琴交给他<br>我们不走了<br>我们需要土地<br>需要永不毁灭的土地<br>我们要乘着它<br>度过一生<br>土地是粗糙的，有时狭隘<br>然而，它有历史<br>有一份天空，一份月亮<br>一份露水和早晨<br>我们爱土地<br>我们站着<br>用木鞋挖着泥土<br>门也晒热了<br>我们轻轻靠着，十分美好<br>墙后的草<br>不会再长大了<br>它只用指尖，触了触阳光<br>——顾城《门前》</p>
+]]></content>
+      <categories>
+        <category>生活</category>
+        <category>美文</category>
+      </categories>
+      <tags>
+        <tag>美文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git提交信息规范化</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/Git%E6%8F%90%E4%BA%A4%E4%BF%A1%E6%81%AF%E8%A7%84%E8%8C%83%E5%8C%96/</url>
+    <content><![CDATA[<p>2018年05月11日 17:52:07 奋飛 阅读数：4605</p>
+<p>版权声明：本文为博主原创文章，未经博主允许不得转载。转载请标明出处：<a href="http://blog.csdn.net/ligang2585116！" target="_blank" rel="noopener">http://blog.csdn.net/ligang2585116！</a> <a href="https://blog.csdn.net/ligang2585116/article/details/80284819" target="_blank" rel="noopener">https://blog.csdn.net/ligang2585116/article/details/80284819</a><br>目的<br>统一团队Git Commit标准，便于后续代码review、版本发布、自动化生成change log；<br>可以提供更多更有效的历史信息，方便快速预览以及配合cherry-pick快速合并代码；<br>团队其他成员进行类git blame时可以快速明白代码用意；<br>Git版本规范<br>分支<br>master分支为主分支(保护分支)，不能直接在master上进行修改代码和提交；<br>develop分支为测试分支，所以开发完成需要提交测试的功能合并到该分支；<br>feature分支为开发分支，大家根据不同需求创建独立的功能分支，开发完成后合并到develop分支；<br>fix分支为bug修复分支，需要根据实际情况对已发布的版本进行漏洞修复；<br>Tag<br>采用三段式，v版本.里程碑.序号，如v1.2.1</p>
+<p>架构升级或架构重大调整，修改第2位<br>新功能上线或者模块大的调整，修改第2位<br>bug修复上线，修改第3位<br>具体操作，可参见：Git标签、Git基础-打标签</p>
+<p>changelog<br>版本正式发布后，需要生产changelog文档，便于后续问题追溯。</p>
+<p>Git提交信息<br>message信息格式采用目前主流的Angular规范，这是目前使用最广的写法，比较合理和系统化，并且有配套的工具。</p>
+<p>commit message格式说明<br>Commit message一般包括三部分：Header、Body和Footer。</p>
+<p>Header<br>type(scope):subject</p>
+<p>type：用于说明commit的类别，规定为如下几种<br>feat：新增功能；<br>fix：修复bug；<br>docs：修改文档；<br>refactor：代码重构，未新增任何功能和修复任何bug；<br>build：改变构建流程，新增依赖库、工具等（例如webpack修改）；<br>style：仅仅修改了空格、缩进等，不改变代码逻辑；<br>perf：改善性能和体现的修改；<br>chore：非src和test的修改；<br>test：测试用例的修改；<br>ci：自动化流程配置修改；<br>revert：回滚到上一个版本；<br>scope：【可选】用于说明commit的影响范围<br>subject：commit的简要说明，尽量简短<br>Body<br>对本次commit的详细描述，可分多行</p>
+<p>Footer<br>不兼容变动：需要描述相关信息<br>关闭指定Issue：输入Issue信息<br>commit message工具<br>Commitizen是一个主流的 Commit message 的生成工具，支持Angular的commit message格式，被众多主流框架采用。</p>
+<p>$ npm install -g commitizen<br>1<br>安装完成后，需要在项目目录下，输入以下命令来初始化您的项目以使用cz-conventional-changelog适配器</p>
+<p>$ commitizen init cz-conventional-changelog –save –save-exact<br>1<br>上述命令会干3件事情：</p>
+<p>安装cz-conventional-changelog<br>保存其依赖到package.json中<br>添加config.commitizen key到package.json中，如下：<br>“config”: {<br>   “commitizen”: {<br>       “path”: “./node_modules/cz-conventional-changelog”<br>   }<br>}<br>1<br>2<br>3<br>4<br>5<br>然后使用git cz代替git commit命令即可，或者可以增加友好的npm命令，通过npm run commit进行提交！</p>
+<p>“script”: {<br>    “commit”: “git-cz”<br>}<br>1<br>2<br>3<br>也可以本地安装：</p>
+<p>$ npm install –save-dev commitizen<br>1<br>使用项目内的本地</p>
+<p>$ ./node_modules/.bin/commitizen init cz-conventional-changelog –save-dev –save-exact<br>1<br>$ ./node_modules/.bin/git-cz<br>1<br>生成change log文件<br>cz-conventional-changelog 可以自动根据提交信息生成change log，便于统一管理和查阅！</p>
+<p>$ npm install -g conventional-changelog-cli<br>1<br>进入项目执行</p>
+<h1 id="在之前生成的基础上，叠加"><a href="#在之前生成的基础上，叠加" class="headerlink" title="在之前生成的基础上，叠加"></a>在之前生成的基础上，叠加</h1><p>$ conventional-changelog -p angular -i CHANGELOG.md -s</p>
+<h1 id="生成所有记录，包括之前的"><a href="#生成所有记录，包括之前的" class="headerlink" title="生成所有记录，包括之前的"></a>生成所有记录，包括之前的</h1><p>$ conventional-changelog -p angular -i CHANGELOG.md -s -r 0<br>1<br>2<br>3<br>4<br>同样可以创建npm脚本，来更方便的操作</p>
+<p>“scripts”: {<br>    “changelog”: “conventional-changelog -p angular -i CHANGELOG.md -s -r 0 &amp;&amp; git add CHANGELOG.md”<br>}<br>1<br>2<br>3<br>强制验证提交信息<br>采用Git hooks来拦截提交信息，进行格式判断。这里使用commit-msg钩子，该钩子接收一个参数（存有当前提交信息的临时文件的路径）。如果该钩子脚本以非0退出，Git将放弃提交。</p>
+<p>yorkie用于执行git-hooks，首先在package.json中增加相关配置</p>
+<p>$ npm i –D yorkie<br>1<br>“gitHooks”: {<br>    “commit-msg”: “node git-hooks/verify-commit-msg.js”<br>}<br>1<br>2<br>3<br>verify-commit-msg.js</p>
+<p>const chalk = require(‘chalk’)<br>const msgPath = process.env.GIT_PARAMS<br>const msg = require(‘fs’).readFileSync(msgPath, ‘utf-8’).trim()</p>
+<p>const commitRE = /^(revert: )?(feat|fix|polish|docs|style|refactor|perf|test|workflow|ci|chore|types|build)((.+))?: .{1,50}/</p>
+<p>if (!commitRE.test(msg)) {<br>  console.error(<br>    <code>${chalk.bgRed.white(&#39; ERROR &#39;)} ${chalk.red(</code>invalid commit message format.<code>)}\n\n</code> +<br>    chalk.red(<code>Proper commit message format is required for automated changelog generation. Examples:\n\n</code>) +<br>    <code>${chalk.green(</code>feat(compiler): add ‘comments’ option<code>)}\n</code> +<br>    <code>${chalk.green(</code>fix(v-model): handle events on blur (close #28)<code>)}\n\n</code> +<br>    chalk.red(<code>You can also use ${chalk.cyan(</code>npm run commit<code>)} to interactively generate a commit message.\n</code>)<br>  )<br>  process.exit(1)<br>}<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>参考地址：自定义Git-Git钩子</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>commit规范</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/commit%E8%A7%84%E8%8C%83/</url>
+    <content><![CDATA[<p>git命令：<br><a href="https://www.cnblogs.com/Small-music/p/9075681.html" target="_blank" rel="noopener">https://www.cnblogs.com/Small-music/p/9075681.html</a></p>
+<p>如下博客内容<br><a href="https://blog.csdn.net/zhaileilei1/article/details/83186047" target="_blank" rel="noopener">https://blog.csdn.net/zhaileilei1/article/details/83186047</a></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>flow工作流</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/flow%E5%B7%A5%E4%BD%9C%E6%B5%81/</url>
+    <content><![CDATA[<p>Git-flow 工作流<br><a href="https://github.com/petervanderdoes/gitflow-avh" target="_blank" rel="noopener">https://github.com/petervanderdoes/gitflow-avh</a><br><a href="http://jeffkreeftmeijer.com/2010/why-arent-you-using-git-flow/" target="_blank" rel="noopener">http://jeffkreeftmeijer.com/2010/why-arent-you-using-git-flow/</a><br><a href="http://danielkummer.github.io/git-flow-cheatsheet/" target="_blank" rel="noopener">http://danielkummer.github.io/git-flow-cheatsheet/</a></p>
+<p>安装：<br><a href="https://github.com/petervanderdoes/gitflow-avh/wiki/Installation" target="_blank" rel="noopener">https://github.com/petervanderdoes/gitflow-avh/wiki/Installation</a></p>
+<p>Git-flow 介绍：<br><a href="https://jeffkreeftmeijer.com/git-flow/" target="_blank" rel="noopener">https://jeffkreeftmeijer.com/git-flow/</a></p>
+<p>Git-flow 相关指令： </p>
+<ul>
+<li>git flow init 初始化项目 </li>
+<li>git flow feature start feature_name 创建功能分支 </li>
+<li>git flow feature finish feature_name 完成功能分支 </li>
+<li>git flow release start version 创建预发布分支 </li>
+<li>git flow release finish version 完成预发布分支 </li>
+<li>git flow hotfix start assets 创建快速修复分支 </li>
+<li>git flow hotfix finish assets 完成快速修复分支</li>
+</ul>
+<p>指令简介<br>git flow init<br>初始化 git-flow<br>默认：</p>
+<p>Branch name for production releases: [master]<br>Branch name for “next release” development: [develop]<br>1<br>2<br>各个类型分支前缀：</p>
+<p>How to name your supporting branch prefixes?<br>Feature branches? [feature/]<br>Bugfix branches? [bugfix/]<br>Release branches? [release/]<br>Hotfix branches? [hotfix/]<br>Support branches? [support/]<br>Version tag prefix? []<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>git flow feature start/finish/publish/pull feature_name<br>work on multiple features at the same time</p>
+<p>start 解析：<br>1、基于 develop 分支创建一个新的分支 feature/authentication<br>2、切换至 feature/authentication 分支</p>
+<p>$ git flow feature start authentication<br>Switched to a new branch ‘feature/authentication’</p>
+<p>Summary of actions:</p>
+<ul>
+<li>A new branch ‘feature/authentication’ was created, based on ‘develop’</li>
+<li>You are now on branch ‘feature/authentication’</li>
+</ul>
+<p>Now, start committing on your feature. When done, use:</p>
+<pre><code>git flow feature finish authentication</code></pre><p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>finish 解析：<br>1、切换至 develop 分支<br>2、merge feature/authentication 分支<br>3、删除 feature/authentication 分支</p>
+<p>$ git flow feature finish authentication<br>Switched to branch ‘develop’<br>Updating 9060376..00bafe4<br>Fast-forward<br> authentication.txt | 1 +<br> 1 file changed, 1 insertion(+)<br> create mode 100644 authentication.txt<br>Deleted branch feature/authentication (was 00bafe4).</p>
+<p>Summary of actions:</p>
+<ul>
+<li>The feature branch ‘feature/authentication’ was merged into ‘develop’</li>
+<li>Feature branch ‘feature/authentication’ has been removed</li>
+<li>You are now on branch ‘develop’<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>git flow release start/finish/publish/pull version<br>ready to deploy a new version to production</li>
+</ul>
+<p>start 解析：<br>1、以 develop 为基础创建一个预发布版本分支 release/0.1.0<br>2、切换分支至 release/0.1.0</p>
+<p>$ git flow release start 0.1.0<br>Switched to a new branch ‘release/0.1.0’</p>
+<p>Summary of actions:</p>
+<ul>
+<li>A new branch ‘release/0.1.0’ was created, based on ‘develop’</li>
+<li>You are now on branch ‘release/0.1.0’</li>
+</ul>
+<p>Follow-up actions:</p>
+<ul>
+<li><p>Bump the version number now!</p>
+</li>
+<li><p>Start committing last-minute fixes in preparing your release</p>
+</li>
+<li><p>When done, run:</p>
+<p>   git flow release finish ‘0.1.0’<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>finish 解析：<br>1、切换分支至 master<br>2、合并 release/0.1.0 分支<br>3、为当前 master 打tag 0.1.0<br>4、将 release/0.1.0 合并到 develop<br>5、删除 release/0.1.0 分支</p>
+</li>
+</ul>
+<p>$ git flow release finish 0.1.0<br>Switched to branch ‘master’<br>Merge made by the ‘recursive’ strategy.<br> authentication.txt | 1 +<br> 1 file changed, 1 insertion(+)<br> create mode 100644 authentication.txt<br>Deleted branch release/0.1.0 (was 1b26f7c).</p>
+<p>Summary of actions:</p>
+<ul>
+<li>Latest objects have been fetched from ‘origin’</li>
+<li>Release branch has been merged into ‘master’</li>
+<li>The release was tagged ‘0.1.0’</li>
+<li>Release branch has been back-merged into ‘develop’</li>
+<li>Release branch ‘release/0.1.0’ has been deleted<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>git flow hotfix start/finish/publish/pull assets<br>quickly fix any issues on production</li>
+</ul>
+<p>start 解析：<br>1、以master 分支为基础创建一个 assets 分支<br>2、切换分支至 assets</p>
+<p>$ git flow hotfix start assets<br>Switched to a new branch ‘hotfix/assets’</p>
+<p>Summary of actions:</p>
+<ul>
+<li>A new branch ‘hotfix/assets’ was created, based on ‘master’</li>
+<li>You are now on branch ‘hotfix/assets’</li>
+</ul>
+<p>Follow-up actions:</p>
+<ul>
+<li><p>Bump the version number now!</p>
+</li>
+<li><p>Start committing your hot fixes</p>
+</li>
+<li><p>When done, run:</p>
+<p>   git flow hotfix finish ‘assets’<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>finish 解析：<br>1、切换 master 分支<br>2、合并 assets 分支<br>3、打tag 0.1.1<br>4、合并 assets 分支至 develop<br>5、删除 assets 分支</p>
+</li>
+</ul>
+<p>$ git flow hotfix finish assets<br>Switched to branch ‘master’<br>Merge made by the ‘recursive’ strategy.<br> assets.txt | 1 +<br> 1 file changed, 1 insertion(+)<br> create mode 100644 assets.txt<br>Switched to branch ‘develop’<br>Merge made by the ‘recursive’ strategy.<br> assets.txt | 1 +<br> 1 file changed, 1 insertion(+)<br> create mode 100644 assets.txt<br>Deleted branch hotfix/assets (was 08edb94).</p>
+<p>Summary of actions:</p>
+<ul>
+<li>Latest objects have been fetched from ‘origin’</li>
+<li>Hotfix branch has been merged into ‘master’</li>
+<li>The hotfix was tagged ‘0.1.1’</li>
+<li>Hotfix branch has been back-merged into ‘develop’</li>
+<li>Hotfix branch ‘hotfix/assets’ has been deleted<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>补充说明<br>publish 发布至远程仓库<br>pull origin 从远程仓库拉下代码</li>
+</ul>
+<p>使用场景<br>背景：<br>存在 测试环境（test）对应develop分支、预发布环境（pre）对应 release、生产环境（pro）tag，三个环境</p>
+<p>开发：</p>
+<p>feature 类型分支尽可能少协作开发，本地开发完成就push至远程 develop 分支由测试人员进行测试<br>项目负责人自我衡量是否发 release<br>release 分支测试完成后就可以发布到 pro 环境</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git-flow使用笔记</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/Git-flow%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>Git-flow 使用笔记<br>2012-03-12</p>
+<p>git-flow 原理：A successful Git branching model，两篇不错的中文翻译： Git开发管理之道，一个成功的Git分支模型。</p>
+<p>简单来说，git-flow 就是在 git branch git tag基础上封装出来的代码分支管理模型，把实际开发模拟成 master develop feature release hotfix support 几种场景，其中 master 对应发布上线，develop 对应开发，其他几个在不同的情况下出现。通过封装，git-flow 屏蔽了 git branch 等相对来说比较复杂生硬的命令(git branch 还是比较复杂的，尤其是在多分支情况下)，简单而且规范的解决了代码分支管理问题。</p>
+<p>安装 git-flow:</p>
+<p>1<br>brew install git-flow<br>在一个全新目录下构建 git-flow 模型：</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br> git flow init<br>Initialized empty Git repository in /Users/fannheyward/flowTest/.git/<br>No branches exist yet. Base branches must be created now.<br>Branch name for production releases: [master]<br>Branch name for “next release” development: [develop] </p>
+<p>How to name your supporting branch prefixes?<br>Feature branches? [feature/]<br>Release branches? [release/]<br>Hotfix branches? [hotfix/]<br>Support branches? [support/]<br>Version tag prefix? []<br>或者在现有的版本库构建：</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br> git flow init<br>Which branch should be used for bringing forth production releases?</p>
+<ul>
+<li>master<br>Branch name for production releases: [master]<br>Branch name for “next release” development: [develop] </li>
+</ul>
+<p>How to name your supporting branch prefixes?<br>Feature branches? [feature/]<br>Release branches? [release/]<br>Hotfix branches? [hotfix/]<br>Support branches? [support/]<br>Version tag prefix? []<br>中间会询问生成的分支名，直接回车默认。这样一个 git-flow 分支模型就初始化完成。</p>
+<p>使用场景一：新功能开发，代号 f1</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br> git flow feature start f1<br>Switched to a new branch ‘feature/f1’</p>
+<p>Summary of actions:</p>
+<ul>
+<li>A new branch ‘feature/f1’ was created, based on ‘develop’</li>
+<li>You are now on branch ‘feature/f1’</li>
+</ul>
+<p>Now, start committing on your feature. When done, use:</p>
+<pre><code>git flow feature finish f1</code></pre><p>git-flow 从 develop 分支创建了一个新的分支 feature/f1，并自动切换到这个分支下面。然后就可以进行 f1 功能开发，中间可以多次的 commit 操作。当功能完成后：</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br> git flow feature finish f1<br>Switched to branch ‘develop’<br>Already up-to-date.<br>Deleted branch feature/f1 (was 7bb5749).</p>
+<p>Summary of actions:</p>
+<ul>
+<li>The feature branch ‘feature/f1’ was merged into ‘develop’</li>
+<li>Feature branch ‘feature/f1’ has been removed</li>
+<li>You are now on branch ‘develop’<br>feature/f1 分支的代码会被合并到 develop 里面，然后删除该分支，切换回 develop. 到此，新功能开发这个场景完毕。在 f1 功能开发中，如果 f1 未完成，同时功能 f2 要开始进行，也是可以的。</li>
+</ul>
+<p>使用场景二：发布上线，代号 0.1</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br> git flow release start 0.1<br>Switched to a new branch ‘release/0.1’</p>
+<p>Summary of actions:</p>
+<ul>
+<li>A new branch ‘release/0.1’ was created, based on ‘develop’</li>
+<li>You are now on branch ‘release/0.1’</li>
+</ul>
+<p>Follow-up actions:</p>
+<ul>
+<li><p>Bump the version number now!</p>
+</li>
+<li><p>Start committing last-minute fixes in preparing your release</p>
+</li>
+<li><p>When done, run:</p>
+<p>   git flow release finish ‘0.1’<br>git-flow 从 develop 分支创建一个新的分支 release/0.1，并切换到该分支下，接下来要做的就是修改版本号等发布操作。完成后：</p>
+</li>
+</ul>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br> git flow release finish 0.1<br>Switched to branch ‘master’<br>Merge made by the ‘recursive’ strategy.<br> f1      |    1 +<br> version |    1 +<br> 2 files changed, 2 insertions(+)<br> create mode 100644 f1<br> create mode 100644 version<br>Switched to branch ‘develop’<br>Merge made by the ‘recursive’ strategy.<br> version |    1 +<br> 1 file changed, 1 insertion(+)<br> create mode 100644 version<br>Deleted branch release/0.1 (was d77df80).</p>
+<p>Summary of actions:</p>
+<ul>
+<li>Latest objects have been fetched from ‘origin’</li>
+<li>Release branch has been merged into ‘master’</li>
+<li>The release was tagged ‘0.1’</li>
+<li>Release branch has been back-merged into ‘develop’</li>
+<li>Release branch ‘release/0.1’ has been deleted<br>git-flow 会依次切换到 master develop 下合并 release/0.1 里的修改，然后用 git tag 的给当次发布打上 tag 0.1，可以通过 git tag 查看所有 tag：</li>
+</ul>
+<p>1<br>2<br>3<br> git:(master) git tag<br>0.1<br>0.2<br>使用场景三：紧急 bug 修正，代号 bug1</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br> git flow hotfix start bug1<br>Switched to a new branch ‘hotfix/bug1’</p>
+<p>Summary of actions:</p>
+<ul>
+<li>A new branch ‘hotfix/bug1’ was created, based on ‘master’</li>
+<li>You are now on branch ‘hotfix/bug1’</li>
+</ul>
+<p>Follow-up actions:</p>
+<ul>
+<li><p>Bump the version number now!</p>
+</li>
+<li><p>Start committing your hot fixes</p>
+</li>
+<li><p>When done, run:</p>
+<p>   git flow hotfix finish ‘bug1’<br>git-flow 从 master 分支创建一个新的分支 hotfix/bug1，并切换到该分支下。接下来要做的就是修复 bug，完成后：</p>
+</li>
+</ul>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br> git flow hotfix finish bug1<br>Switched to branch ‘master’<br>Merge made by the ‘recursive’ strategy.<br> f1 |    2 +-<br> 1 file changed, 1 insertion(+), 1 deletion(-)<br>Switched to branch ‘develop’<br>Merge made by the ‘recursive’ strategy.<br> f1 |    2 +-<br> 1 file changed, 1 insertion(+), 1 deletion(-)<br>Deleted branch hotfix/bug1 (was aa3ca2e).</p>
+<p>Summary of actions:</p>
+<ul>
+<li>Latest objects have been fetched from ‘origin’</li>
+<li>Hotfix branch has been merged into ‘master’</li>
+<li>The hotfix was tagged ‘bug1’</li>
+<li>Hotfix branch has been back-merged into ‘develop’</li>
+<li>Hotfix branch ‘hotfix/bug1’ has been deleted<br>git-flow 会依次切换到 master develop 分支下合并 hotfix/bug1，然后删掉 hotfix/bug1。到此，hotfix 完成。</li>
+</ul>
+<p>git-flow 的 feature release 都是从 develop 分支创建，hotfix support 都是从 master 分支创建。</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Commit message 和 Change log 编写指南</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/Commit%20message%20%E5%92%8C%20Change%20log%20%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/46072e82-1492-449a-beff-bb4268cd6431?title=Commit%20message%20%E5%92%8C%20Change%20log%20%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97%20-%20%E9%98%AE%E4%B8%80%E5%B3%B0%E7%9A%84%E7%BD%91%E7%BB%9C%E6%97%A5%E5%BF%97" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/46072e82-1492-449a-beff-bb4268cd6431?title=Commit%20message%20%E5%92%8C%20Change%20log%20%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97%20-%20%E9%98%AE%E4%B8%80%E5%B3%B0%E7%9A%84%E7%BD%91%E7%BB%9C%E6%97%A5%E5%BF%97</a></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>写出好的 commit message</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/git/%E5%86%99%E5%87%BA%E5%A5%BD%E7%9A%84-commit-message/</url>
+    <content><![CDATA[<p>Git 写出好的 commit message<br>victor · 2013年11月22日 · 最后由 liwei78 回复于 3 月前 · 39069 次阅读</p>
+<p> 本帖已被设为精华帖！</p>
+<p>为什幺要关注提交信息<br>加快 Reviewing Code 的过程<br>帮助我们写好 release note<br>5年后帮你快速想起来某个分支，tag 或者 commit 增加了什么功能，改变了哪些代码<br>让其他的开发者在运行 git blame 的时候想跪谢<br>总之一个好的提交信息，会帮助你提高项目的整体质量<br>基本要求<br>第一行应该少于50个字。 随后是一个空行 第一行题目也可以写成：Fix issue #8976<br>喜欢用 vim 的哥们把下面这行代码加入 .vimrc 文件中，来检查拼写和自动折行<br>autocmd Filetype gitcommit setlocal spell textwidth=72<br>永远不在 git commit 上增加 -m <msg> 或 –message=<msg> 参数，而单独写提交信息<br>一个不好的例子 git commit -m “Fix login bug”</p>
+<p>一个推荐的 commit message 应该是这样：</p>
+<p>Redirect user to the requested page after login</p>
+<p><a href="https://trello.com/path/to/relevant/card" target="_blank" rel="noopener">https://trello.com/path/to/relevant/card</a></p>
+<p>Users were being redirected to the home page after login, which is less<br>useful than redirecting to the page they had originally requested before<br>being redirected to the login form.</p>
+<ul>
+<li>Store requested path in a session variable</li>
+<li>Redirect to the stored location after successfully logging in the user<br>注释最好包含一个连接指向你们项目的 issue/story/card。一个完整的连接比一个 issue numbers 更好<br>提交信息中包含一个简短的故事，能让别人更容易理解你的项目<br>注释要回答如下信息<br>为什么这次修改是必要的？</li>
+</ul>
+<p>要告诉 Reviewers，你的提交包含什么改变。让他们更容易审核代码和忽略无关的改变。</p>
+<p>如何解决的问题？</p>
+<p>这可不是说技术细节。看下面的两个例子：</p>
+<p>Introduce a red/black tree to increase search speed<br>Remove <troublesome gem X>, which was causing <specific description of issue introduced by gem><br>如果你的修改特别明显，就可以忽略这个。</p>
+<p>这些变化可能影响哪些地方？</p>
+<p>这是你最需要回答的问题。因为它会帮你发现在某个 branch 或 commit 中的做了过多的改动。一个提交尽量只做1，2个变化。</p>
+<p>你的团队应该有一个自己的行为规则，规定每个 commit 和 branch 最多能含有多少个功能修改。</p>
+<p>小提示<br>使用 fix, add, change 而不是 fixed, added, changed<br>永远别忘了第2行是空行<br>用 Line break 来分割提交信息，让它在某些软件里面更容易读<br>请将每次提交限定于完成一次逻辑功能。并且可能的话，适当地分解为多次小更新，以便每次小型提交都更易于理解。<br>例子<br>Fix bug where user can’t signup.</p>
+<p>[Bug #2873942]</p>
+<p>Users were unable to register if they hadn’t visited the plans<br>and pricing page because we expected that tracking<br>information to exist for the logs we create after a user<br>signs up.  I fixed this by adding a check to the logger<br>to ensure that if that information was not available<br>we weren’t trying to write it.<br>Red”config”: {<br>    “ghooks”: {<br>      “commit-msg”: “validate-commit-msg”<br>    },<br>    “validate-commit-msg”: {<br>      “types”: [“feat”, “fix”, “docs”, “style”, “refactor”, “perf”, “test”, “build”, “ci”, “chore”, “revert”],<br>      “scope”: {<br>        “required”: false,<br>        “allowed”: [“*”],<br>        “validate”: false,<br>        “multiple”: false<br>      },<br>      “warnOnFail”: false,<br>      “maxSubjectLength”: 100,<br>      “subjectPattern”: “.+”,<br>      “subjectPatternErrorMsg”: “subject does not match subject pattern!”,<br>      “helpMessage”: “”,<br>      “autoFix”: false<br>    }<br>  }<br>irect user to the requested page after login</p>
+<p><a href="https://trello.com/path/to/relevant/card" target="_blank" rel="noopener">https://trello.com/path/to/relevant/card</a></p>
+<p>Users were being redirected to the home page after login, which is less<br>useful than redirecting to the page they had originally requested before<br>being redirected to the login form.</p>
+<ul>
+<li>Store requested path in a session variable</li>
+<li>Redirect to the stored location after successfully logging in the user<br>依赖 Github Issue 的 Commit message 格式<br>这种工作方式期望团队使用 Github 的 Project 和 Issue 来管理开发任务。这时 Commit message 的 Header 部分应该包含 Issue Number。</li>
+</ul>
+<p>[#123] Diverting power from warp drive to torpedoes<br>[Closes #123] Torpedoes now sufficiently powered<br>[Closes #123][#124][#125] Torpedoes now sufficiently powered<br>Message Template<br>[<optional state> #issueid] (50 chars or less) summary of changes</p>
+<p>More detailed explanatory text, if necessary. Wrap it to about 72<br>characters or so.</p>
+<p>Further paragraphs come after blank lines.</p>
+<ul>
+<li><p>Bullet points are okay, too</p>
+</li>
+<li><p>Typically a hyphen or asterisk is used for the bullet, preceded by a<br>single space, with blank lines in between, but conventions vary here<br>Angular 规范的 Commit message 格式<br>每次提交，Commit message 都包括三个部分：Header，Body 和 Footer。</p>
+</li>
+</ul>
+<p><type>(<scope>): <subject><br>// 空一行</p>
+<body>
+// 空一行
+<footer>
+其中，Header 是必需的，Body 和 Footer 可以省略。
+
+<p>Header<br>Header 部分只有一行，包括三个字段：type（必需）、scope（可选）和 subject（必需）。</p>
+<p>type 用于说明 commit 的类别，只允许使用下面7个标识。</p>
+<p>feat 新功能（feature）<br>fix 修补bug<br>docs 文档（documentation）<br>style 格式（不影响代码运行的变动）<br>refactor 重构（即不是新增功能，也不是修改bug的代码变动）<br>test 增加测试<br>chore 构建过程、辅助工具的变动<br>perf 提高性能<br>如果 type 为 feat 和 fix，则该 commit 将肯定出现在 Change log 之中。</p>
+<p>scope 用于说明 commit 影响的范围，比如数据层、控制层、视图层等等，视项目不同而不同。</p>
+<p>subject 是 commit 目的的简短描述，不超过50个字符。</p>
+<p>以动词开头，使用第一人称现在时，比如 change，而不是 changed 或 changes<br>第一个字母大写<br>结尾不加句号<br>Body<br>Body 部分是对本次 commit 的详细描述，可以分成多行。下面是一个范例。</p>
+<p>More detailed explanatory text, if necessary.  Wrap it to<br>about 72 characters or so.</p>
+<p>Further paragraphs come after blank lines.</p>
+<ul>
+<li>Bullet points are okay, too</li>
+<li>Use a hanging indent<br>应该说明代码变动的动机，以及与以前行为的对比，参考前文提到的 注释要回答如下信息。</li>
+</ul>
+<p>Footer<br>Footer 部分只用于不兼容变动和关闭 Issue。</p>
+<p>BREAKING CHANGE: isolate scope bindings definition has changed.</p>
+<pre><code>To migrate the code follow the example below:
+
+Before:
+
+scope: {
+  myAttr: &apos;attribute&apos;,
+}
+
+After:
+
+scope: {
+  myAttr: &apos;@&apos;,
+}
+
+The removed `inject` wasn&apos;t generaly useful for directives so there should be no code using it.</code></pre><p>Closes #123, #245, #992<br>相关工具<br>Commitizen 是一个撰写合格 Commit message 的工具<br>validate-commit-msg 用于检查 Node 项目的 Commit message 是否符合格式<br>conventional-changelog 是生成 Change log 的工具<br>延伸阅读<br>A Note About Git Commit Messages<br>Proper Git Commit Messages and an Elegant Git History<br>A Better Git Commit<br>5 Useful Tips For A Better Commit Message<br>好玩的提交信息<br>Commit message 和 Change log 编写指南<br>git_commit_message<br>Write good git commit message<br> 76 个赞</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>传递函数离散化之双线性转换</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E5%85%B6%E5%AE%83/%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0%E7%A6%BB%E6%95%A3%E5%8C%96%E4%B9%8B%E5%8F%8C%E7%BA%BF%E6%80%A7%E8%BD%AC%E6%8D%A2/</url>
+    <content><![CDATA[<p>百度 todo</p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>其它</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>状态矩阵离散化</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E5%85%B6%E5%AE%83/%E7%8A%B6%E6%80%81%E7%9F%A9%E9%98%B5%E7%A6%BB%E6%95%A3%E5%8C%96/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/1055a2e0-f7d0-4ba6-9714-86ad9d355396?title=4%E3%80%81%E7%8A%B6%E6%80%81%E7%9F%A9%E9%98%B5%E7%A6%BB%E6%95%A3%E5%8C%96" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/1055a2e0-f7d0-4ba6-9714-86ad9d355396?title=4%E3%80%81%E7%8A%B6%E6%80%81%E7%9F%A9%E9%98%B5%E7%A6%BB%E6%95%A3%E5%8C%96</a><br>todo</p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>其它</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>连续系统离散化方法</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E5%85%B6%E5%AE%83/%E8%BF%9E%E7%BB%AD%E7%B3%BB%E7%BB%9F%E7%A6%BB%E6%95%A3%E5%8C%96%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>控制</category>
+        <category>其它</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>一阶倒立摆模型</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E5%85%B6%E5%AE%83/%E4%B8%80%E9%98%B6%E5%80%92%E7%AB%8B%E6%91%86%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p><a href="https://wenku.baidu.com/view/640170f7a1c7aa00b52acbb3.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/640170f7a1c7aa00b52acbb3.html</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>其它</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>运动学/动力学 公式汇总</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E5%85%B6%E5%AE%83/%E8%BF%90%E5%8A%A8%E5%AD%A6-%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E5%85%AC%E5%BC%8F%E6%B1%87%E6%80%BB/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/ceef1bd7-28da-44b2-a2ee-80fc93cc64bb?title=7%E3%80%81%E8%BF%90%E5%8A%A8%E5%AD%A6%2F%E5%8A%A8%E5%8A%9B%E5%AD%A6%20%E5%85%AC%E5%BC%8F%E6%B1%87%E6%80%BB" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/ceef1bd7-28da-44b2-a2ee-80fc93cc64bb?title=7%E3%80%81%E8%BF%90%E5%8A%A8%E5%AD%A6%2F%E5%8A%A8%E5%8A%9B%E5%AD%A6%20%E5%85%AC%E5%BC%8F%E6%B1%87%E6%80%BB</a></p>
+<p>TODO</p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>其它</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>拉氏变换基本性质 &amp; 拉氏变换和z变换表</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E5%85%B6%E5%AE%83/%E6%8B%89%E6%B0%8F%E5%8F%98%E6%8D%A2%E5%9F%BA%E6%9C%AC%E6%80%A7%E8%B4%A8-%E6%8B%89%E6%B0%8F%E5%8F%98%E6%8D%A2%E5%92%8Cz%E5%8F%98%E6%8D%A2%E8%A1%A8/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/bff44559-4aee-4ffc-b246-ebc12bea3a0d?title=8%E3%80%81%E6%8B%89%E6%B0%8F%E5%8F%98%E6%8D%A2%E5%9F%BA%E6%9C%AC%E6%80%A7%E8%B4%A8%20%26%20%E6%8B%89%E6%B0%8F%E5%8F%98%E6%8D%A2%E5%92%8Cz%E5%8F%98%E6%8D%A2%E8%A1%A8" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/bff44559-4aee-4ffc-b246-ebc12bea3a0d?title=8%E3%80%81%E6%8B%89%E6%B0%8F%E5%8F%98%E6%8D%A2%E5%9F%BA%E6%9C%AC%E6%80%A7%E8%B4%A8%20%26%20%E6%8B%89%E6%B0%8F%E5%8F%98%E6%8D%A2%E5%92%8Cz%E5%8F%98%E6%8D%A2%E8%A1%A8</a><br>TODO</p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>其它</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>1-拉普拉斯变换</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/1-%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E5%8F%98%E6%8D%A2/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/1ec7824f-1a76-41d0-8354-058e2530cd48?title=1%E3%80%81%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E5%8F%98%E6%8D%A2" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/1ec7824f-1a76-41d0-8354-058e2530cd48?title=1%E3%80%81%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E5%8F%98%E6%8D%A2</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2-卷积定理</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/2-%E5%8D%B7%E7%A7%AF%E5%AE%9A%E7%90%86/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/res/f0965e5c-bd26-43ef-b6ac-2eab4c818a6c/asset-v1%3ATsinghuaX%2B40250074X%2B2016_T2%2Btype%40asset%2Bblock%40TAC0-3-1.pdf" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/res/f0965e5c-bd26-43ef-b6ac-2eab4c818a6c/asset-v1%3ATsinghuaX%2B40250074X%2B2016_T2%2Btype%40asset%2Bblock%40TAC0-3-1.pdf</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>3-李雅普诺夫稳定性</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/3-%E6%9D%8E%E9%9B%85%E6%99%AE%E8%AF%BA%E5%A4%AB%E7%A8%B3%E5%AE%9A%E6%80%A7/</url>
+    <content><![CDATA[<p><img src="./3-%E6%9D%8E%E9%9B%85%E6%99%AE%E8%AF%BA%E5%A4%AB%E7%A8%B3%E5%AE%9A%E6%80%A7/lp.png" alt="李雅普诺夫稳定性"></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>4-稳定性的ROUTH判据</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/4-%E7%A8%B3%E5%AE%9A%E6%80%A7%E7%9A%84ROUTH%E5%88%A4%E6%8D%AE/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/89b1e292-b0a7-4416-871e-dea5ba02827d?title=4%E3%80%81%E7%A8%B3%E5%AE%9A%E6%80%A7%E7%9A%84ROUTH%E5%88%A4%E6%8D%AE%20TODO" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/89b1e292-b0a7-4416-871e-dea5ba02827d?title=4%E3%80%81%E7%A8%B3%E5%AE%9A%E6%80%A7%E7%9A%84ROUTH%E5%88%A4%E6%8D%AE%20TODO</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>5-参数稳定域</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/5-%E5%8F%82%E6%95%B0%E7%A8%B3%E5%AE%9A%E5%9F%9F/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/abccda9f-3ddc-46a5-8535-5c2ec89caab4?title=5%E3%80%81%E5%8F%82%E6%95%B0%E7%A8%B3%E5%AE%9A%E5%9F%9F" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/abccda9f-3ddc-46a5-8535-5c2ec89caab4?title=5%E3%80%81%E5%8F%82%E6%95%B0%E7%A8%B3%E5%AE%9A%E5%9F%9F</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>6-系统类型与稳态误差</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/6-%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%A8%B3%E6%80%81%E8%AF%AF%E5%B7%AE/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/b05931a8-24b0-4c98-a607-5a572efe8491?title=6%E3%80%81%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%A8%B3%E6%80%81%E8%AF%AF%E5%B7%AE" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/b05931a8-24b0-4c98-a607-5a572efe8491?title=6%E3%80%81%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%A8%B3%E6%80%81%E8%AF%AF%E5%B7%AE</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>7-系统扰动静态误差</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/7-%E7%B3%BB%E7%BB%9F%E6%89%B0%E5%8A%A8%E9%9D%99%E6%80%81%E8%AF%AF%E5%B7%AE/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/5c48b093-debe-468b-bc02-cf8af6719c7f?title=7%E3%80%81%E7%B3%BB%E7%BB%9F%E6%89%B0%E5%8A%A8%E9%9D%99%E6%80%81%E8%AF%AF%E5%B7%AE" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/5c48b093-debe-468b-bc02-cf8af6719c7f?title=7%E3%80%81%E7%B3%BB%E7%BB%9F%E6%89%B0%E5%8A%A8%E9%9D%99%E6%80%81%E8%AF%AF%E5%B7%AE</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>8-系统动态性能指标</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/8-%E7%B3%BB%E7%BB%9F%E5%8A%A8%E6%80%81%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/</url>
+    <content><![CDATA[<p>from 现代控制系统 第12 版 5.3节</p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>9-高阶系统的近似</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/9-%E9%AB%98%E9%98%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%BF%91%E4%BC%BC/</url>
+    <content><![CDATA[<p>from 现代控制系统 第12 版 5.8节</p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>10-系统校正(比例 积分 微分校正 二阶系统特性)</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/10-%E7%B3%BB%E7%BB%9F%E6%A0%A1%E6%AD%A3(%E6%AF%94%E4%BE%8B-%E7%A7%AF%E5%88%86-%E5%BE%AE%E5%88%86%E6%A0%A1%E6%AD%A3-%E4%BA%8C%E9%98%B6%E7%B3%BB%E7%BB%9F%E7%89%B9%E6%80%A7)/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>11-频率特性</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/11-%E9%A2%91%E7%8E%87%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/35ada48b-2e15-47b9-8ec1-e9abdcaa6e12?title=11%E3%80%81%E9%A2%91%E7%8E%87%E7%89%B9%E6%80%A7%EF%BC%88TODO%EF%BC%89" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/35ada48b-2e15-47b9-8ec1-e9abdcaa6e12?title=11%E3%80%81%E9%A2%91%E7%8E%87%E7%89%B9%E6%80%A7%EF%BC%88TODO%EF%BC%89</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>12-参数灵敏度(控制对象参数、输入噪声、测量噪声，抗干扰)</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/12-%E5%8F%82%E6%95%B0%E7%81%B5%E6%95%8F%E5%BA%A6(%E6%8E%A7%E5%88%B6%E5%AF%B9%E8%B1%A1%E5%8F%82%E6%95%B0%E3%80%81%E8%BE%93%E5%85%A5%E5%99%AA%E5%A3%B0%E3%80%81%E6%B5%8B%E9%87%8F%E5%99%AA%E5%A3%B0%EF%BC%8C%E6%8A%97%E5%B9%B2%E6%89%B0)/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/f65cd625-f8d8-466f-8fc0-a998d48cba0f?title=12%E3%80%81%E5%8F%82%E6%95%B0%E7%81%B5%E6%95%8F%E5%BA%A6%EF%BC%88%E6%8E%A7%E5%88%B6%E5%AF%B9%E8%B1%A1%E5%8F%82%E6%95%B0%E3%80%81%E8%BE%93%E5%85%A5%E5%99%AA%E5%A3%B0%E3%80%81%E6%B5%8B%E9%87%8F%E5%99%AA%E5%A3%B0%EF%BC%8C%E6%8A%97%E5%B9%B2%E6%89%B0%EF%BC%89" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/f65cd625-f8d8-466f-8fc0-a998d48cba0f?title=12%E3%80%81%E5%8F%82%E6%95%B0%E7%81%B5%E6%95%8F%E5%BA%A6%EF%BC%88%E6%8E%A7%E5%88%B6%E5%AF%B9%E8%B1%A1%E5%8F%82%E6%95%B0%E3%80%81%E8%BE%93%E5%85%A5%E5%99%AA%E5%A3%B0%E3%80%81%E6%B5%8B%E9%87%8F%E5%99%AA%E5%A3%B0%EF%BC%8C%E6%8A%97%E5%B9%B2%E6%89%B0%EF%BC%89</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>13-奈氏判据理解</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/13-%E5%A5%88%E6%B0%8F%E5%88%A4%E6%8D%AE%E7%90%86%E8%A7%A3/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/8414a548-9f51-4a85-b14a-5a86e9577a60?title=13%E3%80%81%E5%A5%88%E6%B0%8F%E5%88%A4%E6%8D%AE%E7%90%86%E8%A7%A3%EF%BC%88TODO%EF%BC%89" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/8414a548-9f51-4a85-b14a-5a86e9577a60?title=13%E3%80%81%E5%A5%88%E6%B0%8F%E5%88%A4%E6%8D%AE%E7%90%86%E8%A7%A3%EF%BC%88TODO%EF%BC%89</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>14-稳定裕度</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/14-%E7%A8%B3%E5%AE%9A%E8%A3%95%E5%BA%A6/</url>
+    <content><![CDATA[<p><a href="https://wenku.baidu.com/view/2ef9b7c4bb4cf7ec4afed0ce.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/2ef9b7c4bb4cf7ec4afed0ce.html</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>15-根轨迹</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/15-%E6%A0%B9%E8%BD%A8%E8%BF%B9/</url>
+    <content><![CDATA[<p>根轨迹是指当开环系统某一参数从零变到无穷大时，闭环系统特征根（闭环极点）在复平面上的移动的轨迹。<br>通常情况下，根轨迹是指增益K由零到无穷大时根的轨迹。当以其它参数作为参考量时，可转化为等效根轨迹方程，之后等同常规方法取得根轨迹，广义根轨迹。 </p>
+<p>1 +KL(s) = 0</p>
+<p>TODO</p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>16-环路整形-超前和滞后补偿</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%BB%8F%E5%85%B8%E6%8E%A7%E5%88%B6/16-%E7%8E%AF%E8%B7%AF%E6%95%B4%E5%BD%A2-%E8%B6%85%E5%89%8D%E5%92%8C%E6%BB%9E%E5%90%8E%E8%A1%A5%E5%81%BF/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/b80f88bb-114c-453b-a207-c66547771570?title=16%E3%80%81%E7%8E%AF%E8%B7%AF%E6%95%B4%E5%BD%A2-%E8%B6%85%E5%89%8D%E5%92%8C%E6%BB%9E%E5%90%8E%E8%A1%A5%E5%81%BF" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/b80f88bb-114c-453b-a207-c66547771570?title=16%E3%80%81%E7%8E%AF%E8%B7%AF%E6%95%B4%E5%BD%A2-%E8%B6%85%E5%89%8D%E5%92%8C%E6%BB%9E%E5%90%8E%E8%A1%A5%E5%81%BF</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>经典控制</category>
+      </categories>
+      <tags>
+        <tag>经典控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>1-假频和数字频率的概念</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/1-%E5%81%87%E9%A2%91%E5%92%8C%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/6d629932-0123-48e1-9572-5c2df70a7eff?title=1%E3%80%81%E5%81%87%E9%A2%91%E5%92%8C%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E7%9A%84%E6%A6%82%E5%BF%B5" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/6d629932-0123-48e1-9572-5c2df70a7eff?title=1%E3%80%81%E5%81%87%E9%A2%91%E5%92%8C%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E7%9A%84%E6%A6%82%E5%BF%B5</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2-采样信号函数</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/2-%E9%87%87%E6%A0%B7%E4%BF%A1%E5%8F%B7%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/a13dfbd5-c9b7-4c4c-85e8-19f6ba880422?title=2%E3%80%81%E9%87%87%E6%A0%B7%E4%BF%A1%E5%8F%B7%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/a13dfbd5-c9b7-4c4c-85e8-19f6ba880422?title=2%E3%80%81%E9%87%87%E6%A0%B7%E4%BF%A1%E5%8F%B7%E5%87%BD%E6%95%B0</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>3-采样信号恢复过程</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/3-%E9%87%87%E6%A0%B7%E4%BF%A1%E5%8F%B7%E6%81%A2%E5%A4%8D%E8%BF%87%E7%A8%8B/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/dc8add90-6574-4b9d-b0e5-f2dbc11e29eb?title=3%E3%80%81%E9%87%87%E6%A0%B7%E4%BF%A1%E5%8F%B7%E6%81%A2%E5%A4%8D%E8%BF%87%E7%A8%8B" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/dc8add90-6574-4b9d-b0e5-f2dbc11e29eb?title=3%E3%80%81%E9%87%87%E6%A0%B7%E4%BF%A1%E5%8F%B7%E6%81%A2%E5%A4%8D%E8%BF%87%E7%A8%8B</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>4-z变换和反变换</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/4-z%E5%8F%98%E6%8D%A2%E5%92%8C%E5%8F%8D%E5%8F%98%E6%8D%A2/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/005186e4-9ea3-4591-8a13-c7144555887f?title=4%E3%80%81z%E5%8F%98%E6%8D%A2%E5%92%8C%E5%8F%8D%E5%8F%98%E6%8D%A2" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/005186e4-9ea3-4591-8a13-c7144555887f?title=4%E3%80%81z%E5%8F%98%E6%8D%A2%E5%92%8C%E5%8F%8D%E5%8F%98%E6%8D%A2</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>5-脉冲传递函数</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/5-%E8%84%89%E5%86%B2%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/1cc2032a-7d29-4037-906a-408797b8f5f4?title=5%E3%80%81%E8%84%89%E5%86%B2%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/1cc2032a-7d29-4037-906a-408797b8f5f4?title=5%E3%80%81%E8%84%89%E5%86%B2%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>6-计算机控制系统的脉冲传递函数</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/6-%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%84%89%E5%86%B2%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/d01b7e62-19df-496d-9c08-34ccb7de05e4?title=6%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%84%89%E5%86%B2%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/d01b7e62-19df-496d-9c08-34ccb7de05e4?title=6%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%84%89%E5%86%B2%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>7-计算机控制系统的稳定性分析TODO</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/7-%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%E5%88%86%E6%9E%90TODO/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/82ac18e5-8c8d-4a8d-92a4-9aacc205c7b0?title=7%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%E5%88%86%E6%9E%90TODO" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/82ac18e5-8c8d-4a8d-92a4-9aacc205c7b0?title=7%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%E5%88%86%E6%9E%90TODO</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>8-计算机控制系统-稳态性能</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/8-%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F-%E7%A8%B3%E6%80%81%E6%80%A7%E8%83%BD/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/7feb6ce3-ed40-48d8-9fc1-0150f012727f?title=8%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F-%E7%A8%B3%E6%80%81%E6%80%A7%E8%83%BD" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/7feb6ce3-ed40-48d8-9fc1-0150f012727f?title=8%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F-%E7%A8%B3%E6%80%81%E6%80%A7%E8%83%BD</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>9-计算机控制系统-暂态性能</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/9-%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F-%E6%9A%82%E6%80%81%E6%80%A7%E8%83%BD/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/d3cd1e36-db9f-4af5-833b-0f76e56e4e4f?title=9%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F-%E6%9A%82%E6%80%81%E6%80%A7%E8%83%BD" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/d3cd1e36-db9f-4af5-833b-0f76e56e4e4f?title=9%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F-%E6%9A%82%E6%80%81%E6%80%A7%E8%83%BD</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>10-数字控制器的模拟化设计方法</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/10-%E6%95%B0%E5%AD%97%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%8C%96%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/30ea3560-16b2-497c-a591-3379fd8fdb82?title=10%E3%80%81%E6%95%B0%E5%AD%97%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%8C%96%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/30ea3560-16b2-497c-a591-3379fd8fdb82?title=10%E3%80%81%E6%95%B0%E5%AD%97%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%8C%96%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>11-连续控制器离散化方法</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/11-%E8%BF%9E%E7%BB%AD%E6%8E%A7%E5%88%B6%E5%99%A8%E7%A6%BB%E6%95%A3%E5%8C%96%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/46f12713-a2d3-48ba-aea3-818a54ba4100?title=11%E3%80%81%E8%BF%9E%E7%BB%AD%E6%8E%A7%E5%88%B6%E5%99%A8%E7%A6%BB%E6%95%A3%E5%8C%96%E6%96%B9%E6%B3%95" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/46f12713-a2d3-48ba-aea3-818a54ba4100?title=11%E3%80%81%E8%BF%9E%E7%BB%AD%E6%8E%A7%E5%88%B6%E5%99%A8%E7%A6%BB%E6%95%A3%E5%8C%96%E6%96%B9%E6%B3%95</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>12-数字PID控制器TODO</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/12-%E6%95%B0%E5%AD%97PID%E6%8E%A7%E5%88%B6%E5%99%A8TODO/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/bebc4d76-9c34-4762-8c10-34882a6768cd?title=12%E3%80%81%E6%95%B0%E5%AD%97PID%E6%8E%A7%E5%88%B6%E5%99%A8TODO" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/bebc4d76-9c34-4762-8c10-34882a6768cd?title=12%E3%80%81%E6%95%B0%E5%AD%97PID%E6%8E%A7%E5%88%B6%E5%99%A8TODO</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>13-Smith预估控制TODO</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/13-Smith%E9%A2%84%E4%BC%B0%E6%8E%A7%E5%88%B6TODO/</url>
+    <content><![CDATA[<p>延时控制<br>模型延时估计反馈</p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>14-数字控制器的直接设计法</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/14-%E6%95%B0%E5%AD%97%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E7%9B%B4%E6%8E%A5%E8%AE%BE%E8%AE%A1%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/fd559180-bcb7-49eb-87ad-a01f5fee58ea?title=14%E3%80%81%E6%95%B0%E5%AD%97%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E7%9B%B4%E6%8E%A5%E8%AE%BE%E8%AE%A1%E6%B3%95" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/fd559180-bcb7-49eb-87ad-a01f5fee58ea?title=14%E3%80%81%E6%95%B0%E5%AD%97%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E7%9B%B4%E6%8E%A5%E8%AE%BE%E8%AE%A1%E6%B3%95</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>15-简单与复杂最小拍控制器的设计方法</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/15-%E7%AE%80%E5%8D%95%E4%B8%8E%E5%A4%8D%E6%9D%82%E6%9C%80%E5%B0%8F%E6%8B%8D%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/6be40e33-5293-4cc6-a5a6-46d24a54b632?title=15%E3%80%81%E7%AE%80%E5%8D%95%E4%B8%8E%E5%A4%8D%E6%9D%82%E6%9C%80%E5%B0%8F%E6%8B%8D%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/6be40e33-5293-4cc6-a5a6-46d24a54b632?title=15%E3%80%81%E7%AE%80%E5%8D%95%E4%B8%8E%E5%A4%8D%E6%9D%82%E6%9C%80%E5%B0%8F%E6%8B%8D%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>16-最小拍控制器的工程化改进-TODO</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/16-%E6%9C%80%E5%B0%8F%E6%8B%8D%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%8C%96%E6%94%B9%E8%BF%9B-TODO/</url>
+    <content><![CDATA[<ol>
+<li><p>最小拍无纹波控制器设计<br>TODO</p>
+</li>
+<li><p>针对输入信号类型敏感问题的改进<br>TODO</p>
+</li>
+<li><p>针对模型参数变化敏感问题的改进<br>TODO</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>17-离散状态空间模型的建立方法</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/17-%E7%A6%BB%E6%95%A3%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%BB%BA%E7%AB%8B%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/b86f6e1f-d4af-4675-b4b3-1469db964049?title=17%E3%80%81%E7%A6%BB%E6%95%A3%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%BB%BA%E7%AB%8B%E6%96%B9%E6%B3%95" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/b86f6e1f-d4af-4675-b4b3-1469db964049?title=17%E3%80%81%E7%A6%BB%E6%95%A3%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%BB%BA%E7%AB%8B%E6%96%B9%E6%B3%95</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>18-按极点配置设计离散状态空间控制律</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/18-%E6%8C%89%E6%9E%81%E7%82%B9%E9%85%8D%E7%BD%AE%E8%AE%BE%E8%AE%A1%E7%A6%BB%E6%95%A3%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%8E%A7%E5%88%B6%E5%BE%8B/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/2dbe083a-92cf-4ea7-b11a-aca40e324423?title=18%E3%80%81%E6%8C%89%E6%9E%81%E7%82%B9%E9%85%8D%E7%BD%AE%E8%AE%BE%E8%AE%A1%E7%A6%BB%E6%95%A3%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%8E%A7%E5%88%B6%E5%BE%8B" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/2dbe083a-92cf-4ea7-b11a-aca40e324423?title=18%E3%80%81%E6%8C%89%E6%9E%81%E7%82%B9%E9%85%8D%E7%BD%AE%E8%AE%BE%E8%AE%A1%E7%A6%BB%E6%95%A3%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%8E%A7%E5%88%B6%E5%BE%8B</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>19-观测器设计</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/19-%E8%A7%82%E6%B5%8B%E5%99%A8%E8%AE%BE%E8%AE%A1/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/4ee62f9a-83da-43aa-bd52-a8f5fe6865f0?title=19%E3%80%81%E8%A7%82%E6%B5%8B%E5%99%A8%E8%AE%BE%E8%AE%A1" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/4ee62f9a-83da-43aa-bd52-a8f5fe6865f0?title=19%E3%80%81%E8%A7%82%E6%B5%8B%E5%99%A8%E8%AE%BE%E8%AE%A1</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>资料</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E4%BC%98%E5%8C%96%E6%8E%A7%E5%88%B6/%E8%B5%84%E6%96%99/</url>
+    <content><![CDATA[<p>优化问题求解综述：<br><a href="https://www.cnblogs.com/Hand-Head/articles/5186763.html" target="_blank" rel="noopener">https://www.cnblogs.com/Hand-Head/articles/5186763.html</a></p>
+<p>变分法知乎专栏：<br><a href="https://zhuanlan.zhihu.com/yueaptx" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/yueaptx</a></p>
+<p><img src="./%E8%B5%84%E6%96%99/1.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>优化控制</category>
+      </categories>
+      <tags>
+        <tag>优化控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>最优控制LQR求解(离散)</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E4%BC%98%E5%8C%96%E6%8E%A7%E5%88%B6/%E6%9C%80%E4%BC%98%E6%8E%A7%E5%88%B6LQR%E6%B1%82%E8%A7%A3-%E7%A6%BB%E6%95%A3/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/fa2562bd-f4f7-4cfa-9fb2-36f760619fbe?title=1%E3%80%81%E6%9C%80%E4%BC%98%E6%8E%A7%E5%88%B6LQR%E6%B1%82%E8%A7%A3%EF%BC%88%E7%A6%BB%E6%95%A3%EF%BC%89" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/fa2562bd-f4f7-4cfa-9fb2-36f760619fbe?title=1%E3%80%81%E6%9C%80%E4%BC%98%E6%8E%A7%E5%88%B6LQR%E6%B1%82%E8%A7%A3%EF%BC%88%E7%A6%BB%E6%95%A3%EF%BC%89</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>优化控制</category>
+      </categories>
+      <tags>
+        <tag>优化控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>最优控制LQR求解(连续)</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E4%BC%98%E5%8C%96%E6%8E%A7%E5%88%B6/%E6%9C%80%E4%BC%98%E6%8E%A7%E5%88%B6LQR%E6%B1%82%E8%A7%A3-%E8%BF%9E%E7%BB%AD/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/cece3b78-490b-4adb-a5aa-186369ed52cd?title=2%E3%80%81%E6%9C%80%E4%BC%98%E6%8E%A7%E5%88%B6LQR%E6%B1%82%E8%A7%A3%EF%BC%88%E8%BF%9E%E7%BB%AD%EF%BC%89" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/cece3b78-490b-4adb-a5aa-186369ed52cd?title=2%E3%80%81%E6%9C%80%E4%BC%98%E6%8E%A7%E5%88%B6LQR%E6%B1%82%E8%A7%A3%EF%BC%88%E8%BF%9E%E7%BB%AD%EF%BC%89</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>优化控制</category>
+      </categories>
+      <tags>
+        <tag>优化控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>系统辨识的分类</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%B3%BB%E7%BB%9F%E8%BE%A8%E8%AF%86/%E7%B3%BB%E7%BB%9F%E8%BE%A8%E8%AF%86%E7%9A%84%E5%88%86%E7%B1%BB/</url>
+    <content><![CDATA[<p>非参数模型辨识方法<br>非参数模型辨识方法获得的模型为非参数 模型。它在假定过程是线性的前提下，不必事先确定过程模型的具体结构，因而这类方法可适用于任意复杂的过程。非参数模型采用响应曲线来描述，如时域中的脉冲响应模型、阶跃响应模型和频域中的频率响应模型等。<br>参数模型辨识方法<br>此方法需要事先假定一种模型结构，然后通过极小化模型与对象之间的误差准则函数来确定模型的参数。如果模型的结构无法事先确定，则必须先利用结构辨识方法确定模型的结构（如系统阶次、纯延时等），然后进一步确定模型的参数。参数模型辨识方法根据工作原理又分为三类。</p>
+<p>最小二乘法：利用最小二乘原理，通过极小化广义误差的平方和函数来确定系统模型的参数；<br>梯度校正法：利用最速下降法原理，沿着误差准则函数关于模型参数的负梯度方向，逐步修改模型的参数估计值，直至误差准则函数达到最小值；<br>极大似然法：根据极大似然原理，通过极大化似然函数来确定模型的参数。<br>2、参数模型<br>确定性模型<br>SISO系统的确定性模型可表示为</p>
+<p>A(z −1)y(k)=z −d B(z −1 )u(k)</p>
+<p>随机模型</p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>系统辨识</category>
+      </categories>
+      <tags>
+        <tag>系统辨识</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>微分和导数的关系</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E5%85%B6%E5%AE%83/%E5%BE%AE%E5%88%86%E5%92%8C%E5%AF%BC%E6%95%B0%E7%9A%84%E5%85%B3%E7%B3%BB/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/71cb3166-d0a9-4b1a-8e5b-9f712a040432?title=1%E3%80%81%E5%BE%AE%E5%88%86%E5%92%8C%E5%AF%BC%E6%95%B0%E7%9A%84%E5%85%B3%E7%B3%BB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/71cb3166-d0a9-4b1a-8e5b-9f712a040432?title=1%E3%80%81%E5%BE%AE%E5%88%86%E5%92%8C%E5%AF%BC%E6%95%B0%E7%9A%84%E5%85%B3%E7%B3%BB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>拉格朗日乘数法</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E4%BC%98%E5%8C%96/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/6dc7b4e5-449e-47af-b595-f2728c55774c?title=2%E3%80%81%E5%A4%9A%E5%8F%98%E9%87%8F%E5%BE%AE%E7%A7%AF%E5%88%86%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0%E6%B3%95" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/6dc7b4e5-449e-47af-b595-f2728c55774c?title=2%E3%80%81%E5%A4%9A%E5%8F%98%E9%87%8F%E5%BE%AE%E7%A7%AF%E5%88%86%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0%E6%B3%95</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>拉格朗日插值</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E5%85%B6%E5%AE%83/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC/</url>
+    <content><![CDATA[<p><a href="https://www.zhihu.com/question/58333118" target="_blank" rel="noopener">https://www.zhihu.com/question/58333118</a></p>
+<p>TODO</p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>拉格朗日乘数法理解</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E4%BC%98%E5%8C%96/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0%E6%B3%95%E7%90%86%E8%A7%A3/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/dd9d5e3b-6858-4b10-a22b-9936ec1b1cab?title=5%E3%80%81%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0%E6%B3%95%E7%90%86%E8%A7%A3" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/dd9d5e3b-6858-4b10-a22b-9936ec1b1cab?title=5%E3%80%81%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0%E6%B3%95%E7%90%86%E8%A7%A3</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>约束优化方法之拉格朗日乘子法与KKT条件</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E4%BC%98%E5%8C%96/%E7%BA%A6%E6%9D%9F%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E4%B9%8B%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E5%AD%90%E6%B3%95%E4%B8%8EKKT%E6%9D%A1%E4%BB%B6/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/49e2f5e0-8a38-4b86-b19d-269fbafc1586?title=6%E3%80%81%E7%BA%A6%E6%9D%9F%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E4%B9%8B%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E5%AD%90%E6%B3%95%E4%B8%8EKKT%E6%9D%A1%E4%BB%B6%20-%20ooon%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/49e2f5e0-8a38-4b86-b19d-269fbafc1586?title=6%E3%80%81%E7%BA%A6%E6%9D%9F%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E4%B9%8B%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E5%AD%90%E6%B3%95%E4%B8%8EKKT%E6%9D%A1%E4%BB%B6%20-%20ooon%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>拉格朗日乘子法和KKT条件</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E4%BC%98%E5%8C%96/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E5%AD%90%E6%B3%95%E5%92%8CKKT%E6%9D%A1%E4%BB%B6/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/d063af65-60bd-470c-9dba-fbb066c9f662?title=7%E3%80%81%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E5%AD%90%E6%B3%95%EF%BC%88Lagrange%20Multiplier)%20%E5%92%8CKKT%E6%9D%A1%E4%BB%B6" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/d063af65-60bd-470c-9dba-fbb066c9f662?title=7%E3%80%81%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E5%AD%90%E6%B3%95%EF%BC%88Lagrange%20Multiplier)%20%E5%92%8CKKT%E6%9D%A1%E4%BB%B6</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>优化方法笔记</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E4%BC%98%E5%8C%96/%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/c0a41765-e10c-4a87-884d-9c832d5ba4d1?title=8%E3%80%81%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/c0a41765-e10c-4a87-884d-9c832d5ba4d1?title=8%E3%80%81%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>泛函与变分初步</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E4%BC%98%E5%8C%96/%E6%B3%9B%E5%87%BD%E4%B8%8E%E5%8F%98%E5%88%86%E5%88%9D%E6%AD%A5/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/515c4be4-9c6b-4426-9d7d-6de8d3a13534?title=9%E3%80%81%E6%B3%9B%E5%87%BD%E4%B8%8E%E5%8F%98%E5%88%86%E5%88%9D%E6%AD%A5%EF%BC%88Euler-lagrange%E6%9D%A1%E4%BB%B6%EF%BC%89" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/515c4be4-9c6b-4426-9d7d-6de8d3a13534?title=9%E3%80%81%E6%B3%9B%E5%87%BD%E4%B8%8E%E5%8F%98%E5%88%86%E5%88%9D%E6%AD%A5%EF%BC%88Euler-lagrange%E6%9D%A1%E4%BB%B6%EF%BC%89</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>卷积和e^s的理解</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E5%85%B6%E5%AE%83/%E5%8D%B7%E7%A7%AF%E5%92%8Ce-s%E7%9A%84%E7%90%86%E8%A7%A3/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/44ca4ff2-82d6-488b-975c-73bbe078d46f?title=10%E3%80%81%E5%8D%B7%E7%A7%AF%E5%92%8Ce%5Es%E7%9A%84%E7%90%86%E8%A7%A3" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/44ca4ff2-82d6-488b-975c-73bbe078d46f?title=10%E3%80%81%E5%8D%B7%E7%A7%AF%E5%92%8Ce%5Es%E7%9A%84%E7%90%86%E8%A7%A3</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>三次样条</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E5%85%B6%E5%AE%83/%E4%B8%89%E6%AC%A1%E6%A0%B7%E6%9D%A1/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/443dffbe-d78f-4b9e-b0b4-e7731a7b551c?title=11%E3%80%81%E4%B8%89%E6%AC%A1%E6%A0%B7%E6%9D%A1" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/443dffbe-d78f-4b9e-b0b4-e7731a7b551c?title=11%E3%80%81%E4%B8%89%E6%AC%A1%E6%A0%B7%E6%9D%A1</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多项式轨迹--五次多项式轨迹</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E5%85%B6%E5%AE%83/%E5%A4%9A%E9%A1%B9%E5%BC%8F%E8%BD%A8%E8%BF%B9-%E4%BA%94%E6%AC%A1%E5%A4%9A%E9%A1%B9%E5%BC%8F%E8%BD%A8%E8%BF%B9/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/272acdbb-2458-4c15-b705-6eebfb8f3970?title=12%E3%80%81%E5%A4%9A%E9%A1%B9%E5%BC%8F%E8%BD%A8%E8%BF%B9--%E4%BA%94%E6%AC%A1%E5%A4%9A%E9%A1%B9%E5%BC%8F%E8%BD%A8%E8%BF%B9%20-%20Brian%E7%9A%84%E5%8D%9A%E5%AE%A2%20-%20CSDN%E5%8D%9A%E5%AE%A2" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/272acdbb-2458-4c15-b705-6eebfb8f3970?title=12%E3%80%81%E5%A4%9A%E9%A1%B9%E5%BC%8F%E8%BD%A8%E8%BF%B9--%E4%BA%94%E6%AC%A1%E5%A4%9A%E9%A1%B9%E5%BC%8F%E8%BD%A8%E8%BF%B9%20-%20Brian%E7%9A%84%E5%8D%9A%E5%AE%A2%20-%20CSDN%E5%8D%9A%E5%AE%A2</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>黎卡提方程的一种解析求解</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E5%85%B6%E5%AE%83/%E9%BB%8E%E5%8D%A1%E6%8F%90%E6%96%B9%E7%A8%8B%E7%9A%84%E4%B8%80%E7%A7%8D%E8%A7%A3%E6%9E%90%E6%B1%82%E8%A7%A3/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/f215d4e8-25cb-4e22-ba66-6841a8af6b56?title=13%E3%80%81%E9%BB%8E%E5%8D%A1%E6%8F%90%E6%96%B9%E7%A8%8B%E7%9A%84%E4%B8%80%E7%A7%8D%E8%A7%A3%E6%9E%90%E6%B1%82%E8%A7%A3%20%EF%BC%88TODO%EF%BC%89" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/f215d4e8-25cb-4e22-ba66-6841a8af6b56?title=13%E3%80%81%E9%BB%8E%E5%8D%A1%E6%8F%90%E6%96%B9%E7%A8%8B%E7%9A%84%E4%B8%80%E7%A7%8D%E8%A7%A3%E6%9E%90%E6%B1%82%E8%A7%A3%20%EF%BC%88TODO%EF%BC%89</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2D碰撞检测</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E5%85%B6%E5%AE%83/2D%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/d2026884-c7a6-430b-b558-6db9e30d1139?title=14%E3%80%812D%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/d2026884-c7a6-430b-b558-6db9e30d1139?title=14%E3%80%812D%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>曲线论的基本公式—Frenet公式</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E5%85%B6%E5%AE%83/%E6%9B%B2%E7%BA%BF%E8%AE%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%85%AC%E5%BC%8F%E2%80%94Frenet%E5%85%AC%E5%BC%8F/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/769c95f0-1800-4ab1-8304-4e040e9905cd?title=15%E3%80%81%E6%9B%B2%E7%BA%BF%E8%AE%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%85%AC%E5%BC%8F%E2%80%94Frenet%E5%85%AC%E5%BC%8F%C2%A0-%20%E7%99%BE%E5%BA%A6%E6%96%87%E5%BA%93" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/769c95f0-1800-4ab1-8304-4e040e9905cd?title=15%E3%80%81%E6%9B%B2%E7%BA%BF%E8%AE%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%85%AC%E5%BC%8F%E2%80%94Frenet%E5%85%AC%E5%BC%8F%C2%A0-%20%E7%99%BE%E5%BA%A6%E6%96%87%E5%BA%93</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>龙格库塔法的基本原理</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E5%85%B6%E5%AE%83/%E9%BE%99%E6%A0%BC%E5%BA%93%E5%A1%94%E6%B3%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<p>该算法是构建在数学支持的基础之上的。对于一阶精度的拉格朗日中值定理有：</p>
+<p>对于微分方程：y’=f(x,y)<br>y(i+1)=y(i)+h<em>K1<br>K1=f(xi,yi)<br>当用点xi处的斜率近似值K1与右端点xi+1处的斜率K2的算术平均值作为平均斜率K*的近似值，那么就会得到二阶精度的改进拉格朗日中值定理：<br>y(i+1)=y(i)+[h</em>( K1+ K2)/2]<br>K1=f(xi,yi)<br>K2=f(x(i)+h,y(i)+h<em>K1)<br>依次类推，如果在区间[xi,xi+1]内多预估几个点上的斜率值K1、K2、……Km，并用他们的加权平均数作为平均斜率K*的近似值，显然能构造出具有很高精度的高阶计算公式。经数学推导、求解，可以得出四阶龙格－库塔公式，也就是在工程中应用广泛的经典龙格－库塔算法：<br>y(i+1)=y(i)+h</em>( K1+ 2<em>K2 +2</em>K3+ K4)/6<br>K1=f(x(i),y(i))<br>K2=f(x(i)+h/2,y(i)+h<em>K1/2)<br>K3=f(x(i)+h/2,y(i)+h</em>K2/2)<br>K4=f(x(i)+h,y(i)+h*K3)<br>通常所说的龙格-库塔法是指四阶而言的，我们可以仿二阶、三阶的情形推导出常用的标准四阶龙格-库塔法公式</p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>todo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>bazel学习笔记</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/other/bazel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>Wokrspace：<br>内含workspace文件的目录，位于该目录内的所有子目录都是工作区间；<br>这个工作区间包括：源代码、build输出目录的符号链接（eg: bazel-bin、bazel-out）由  $ touch WORKSPACE 创建<br>Packages:<br>      只要有BUILD文件的文件夹/目录，都是包，并且位于该包的所有文件或者子目录都属于该包，除非子目录自己有BUILD文件，此时该子目录自称一个包；<br>Targets：<br>      包是一个容器。包的元素称为目标。<br>目标：文件、规则、包组<br>文件：源文件、生成文件<br>源文件：通常由人的努力编写的<br>生成文件：由生成工具根据特定规则从源文件生成<br>规则：规则规定了一组输入和一组输出文件之间的关系，包括从输入中派生输出的必要步骤。规则的输出始终是生成的文件。规则的输入可能是源文件，但它们也可能是生成的文件; 因此，一条规则的输出可能是另一条规则的输入，从而允许构建长链规则。<br>包组：它是一组软件包，其目的是限制某些规则的可访问性。<br>这三种目标的存放位置：文件存放于包的所有目录里，比如.py文件或.cc文件。规则和包组存放于BUILD文件中，他们两个是代码。<br>Labels：<br>      标签；目标的名称就是标签。正式形式为：//根目录（也就是包含workspace的文件夹）/文件夹1:目标名，其中//文件夹1//文件夹2代表的是包名，而非路径，其中的双斜杠//是名字的一种起手写法，与目录表示的/完全是两个概念。在BUILD文件中，规则目标的标签可以完全省略包名和冒号：，因为BUILD文件本身已经指明了包名。<br>假如在同一工作区内有两个包，my/app 和my/app/data，在data文件夹内有一个目标文件a.py，则该文件的标签必须要使用完整标签形式：//my/app/data:a.py而不能使用//data:a.py</p>
+]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>bazel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ vector 容器浅析</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/c++/C-vector-%E5%AE%B9%E5%99%A8%E6%B5%85%E6%9E%90/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/0ed95681-a44d-4c74-b587-91212dcff135?title=2%E3%80%81C%2B%2B%20vector%20%E5%AE%B9%E5%99%A8%E6%B5%85%E6%9E%90%20%7C%20%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/0ed95681-a44d-4c74-b587-91212dcff135?title=2%E3%80%81C%2B%2B%20vector%20%E5%AE%B9%E5%99%A8%E6%B5%85%E6%9E%90%20%7C%20%E8%8F%9C%E9%B8%9F%E6%95%99%E7%A8%8B</a></p>
+]]></content>
+      <categories>
+        <category>编程</category>
+        <category>c++</category>
+      </categories>
+      <tags>
+        <tag>c++</tag>
+        <tag>stl</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CMake学习笔记</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/other/CMake%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<pre><code>CMakeLists.txt 的语法由命令、注释和空格组成，其中命令是不区分大小写的。符号 # 后面的内容被认为是注释。命令由命令名称、小括号和参数组成，参数之间使用空格进行间隔。</code></pre><p>cmake_minimum_required：指定运行此配置文件所需的 CMake 的最低版本；<br>          # CMake 最低版本号要求</p>
+<pre><code>cmake_minimum_required (VERSION 2.8)</code></pre><p>project：参数值是 Demo1，该命令表示项目的名称是 Demo1 。</p>
+<pre><code># 项目信息
+project (Demo1)</code></pre><p>add_executable： 将名为 main.cc 的源文件编译成一个名称为 Demo 的可执行文件。<br>aux_source_directory ：命令，该命令会查找指定目录下的所有源文件，然后将结果存进指定变量名<br>add_subdirectory()：指明本项目包含一个子目录，这样子目录下的 CMakeLists.txt 文件和源代码也会被处理<br>target_link_libraries 指明可执行文件需要连接的链接库<br>add_library ：将 src 目录中的源文件编译为静态链接库</p>
+<p>自定义编译选项 TODO</p>
+]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>cmake</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>invalid+use+of+non-static+member+function+问题</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/c++/invalid-use-of-non-static-member-function-%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>原<br>invalid+use+of+non-static+member+function+问题<br>2011年10月14日 08:47:09 i丹明扬 阅读数：17551 标签： function 编译器 fun 语言 include c  更多<br>个人分类： c++笔记 </p>
+<p>版权声明：本文为博主原创文章，未经博主允许不得转载。 <a href="https://blog.csdn.net/Bill_Ming/article/details/6872165" target="_blank" rel="noopener">https://blog.csdn.net/Bill_Ming/article/details/6872165</a><br>#include <iostream></p>
+<p>using namespace std;<br>class A<br>{<br>public :<br>    A (int i)<br>    {<br>        a = i;</p>
+<pre><code>}
+int fun(int b)
+{
+    return a*c+b;
+}
+int c;</code></pre><p>private :<br>    int a;<br>};</p>
+<p>int main()<br>{<br>    A x(18);<br>    int A::<em>pc;<br>    pc = &amp;A::c;<br>    x.</em>pc = 5;<br>    int (A::<em>pfun)(int);<br>    pfun = A::fun;<br>    A *p = &x;<br>    cout &lt;&lt; (p-&gt;</em>pfun)(10)&lt;&lt;endl;</p>
+<pre><code>return 0;</code></pre><p>}</p>
+<p>会出现错误：error: invalid use of non-static member function ‘int A::fun(int)’|</p>
+<p>int (A::<em>pfun)(int)=A::fun;<br>改成<br>int (A::</em>pfun)(int)=&amp;A::fun;</p>
+<p>在C++语言中，对于一个由类名加俩冒号再加成员名构成的东西（学名叫“quilified-id”），比如：A::x，只有当x是A类的静态成员的时候，A::x才能表示一个左值。</p>
+<p>而对于函数类型到函数指针类型的默认转换，只有当函数类型是左值的时候才行。所有对于非静态的成员函数，就不存在这种从函数类型到函数指针类型的默认转换，于是编译器也就不知道这个<br>p = A::f<br>该怎么搞了。</p>
+<p>（１）要说函数地址确定不确定，由于非静态成员函数指针可以有多态行为，因此，至少在编译期，其地址还真的无法确定。<br>（２）虽然所有的编译器都肯定会把类的非静态成员函数的代码只生成一份（不管是编译时还是运行时），这一点跟非静态成员变量不一样，变量每个对象都有独立的一份。——但我认为，这依然是编译器的实现细节而已，而不是语言特性。从抽象的语言特性角度讲，非静态的成员函数跟非静态的成员变量一样，在没有对象实例的时候，是形不成左值的。</p>
+<p><a href="http://topic.csdn.net/t/20060906/11/5002223.html" target="_blank" rel="noopener">http://topic.csdn.net/t/20060906/11/5002223.html</a> </p>
+]]></content>
+      <categories>
+        <category>编程</category>
+        <category>c++</category>
+      </categories>
+      <tags>
+        <tag>c++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python进阶到高阶大全</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/python/python%E8%BF%9B%E9%98%B6%E5%88%B0%E9%AB%98%E9%98%B6%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/f56005ac-1c7a-4f51-af07-f7cd49f6a22c?title=5%E3%80%81python%E8%BF%9B%E9%98%B6%E5%88%B0%E9%AB%98%E9%98%B6%E5%A4%A7%E5%85%A8%EF%BC%88%E5%BC%BA%E7%83%88%E6%8E%A8%E8%8D%90%EF%BC%89%20-%20qq_41853758%E7%9A%84%E5%8D%9A%E5%AE%A2%20-%20CSDN%E5%8D%9A%E5%AE%A2" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/f56005ac-1c7a-4f51-af07-f7cd49f6a22c?title=5%E3%80%81python%E8%BF%9B%E9%98%B6%E5%88%B0%E9%AB%98%E9%98%B6%E5%A4%A7%E5%85%A8%EF%BC%88%E5%BC%BA%E7%83%88%E6%8E%A8%E8%8D%90%EF%BC%89%20-%20qq_41853758%E7%9A%84%E5%8D%9A%E5%AE%A2%20-%20CSDN%E5%8D%9A%E5%AE%A2</a></p>
+]]></content>
+      <categories>
+        <category>编程</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>c++知识点</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/c++/c++%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
+    <content><![CDATA[<p>1.虚析构函数的见解</p>
+<p>&emsp;&emsp;防止内存泄露，定义一个基类的指针p，在delete p时，如果基类的析构函数是虚函数，这时只会看p所赋值的对象，如果p赋值的对象是派生类的对象，就会调用派生类的析构函数（毫无疑问，在这之前也会先调用基类的构造函数，在调用派生类的构造函数，然后调用派生类的析构函数，基类的析构函数，所谓先构造的后释放）；如果p赋值的对象是基类的对象，就会调用基类的析构函数，这样就不会造成内存泄露。</p>
+<p>&emsp;&emsp;如果基类的析构函数不是虚函数，在delete p时，调用析构函数时，只会看指针的数据类型，而不会去看赋值的对象，这样就会造成内存泄露。</p>
+<p>2.C++11之final关键字</p>
+<p>&emsp;&emsp;禁用继承, C++11中允许将类标记为final，方法时直接在类名称后面使用关键字final，如此，意味着继承该类会导致编译错误。<br>实例：</p>
+<pre><code>class Super final
+{
+    //......
+}</code></pre><p>&emsp;&emsp;禁用重写, C++中还允许将方法标记为fianal，这意味着无法再子类中重写该方法。这时final关键字至于方法参数列表后面，如下</p>
+<pre><code>class Super
+{
+public:
+    Supe();
+    virtual void SomeMethod() final;
+}</code></pre>]]></content>
+      <categories>
+        <category>编程</category>
+        <category>c++</category>
+      </categories>
+      <tags>
+        <tag>c++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python常用库大全</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/python/Python%E5%B8%B8%E7%94%A8%E5%BA%93%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p>环境管理<br>管理 Python 版本和环境的工具<br>p – 非常简单的交互式 python 版本管理工具。<br>pyenv – 简单的 Python 版本管理工具。<br>Vex – 可以在虚拟环境中执行命令。<br>virtualenv – 创建独立 Python 环境的工具。<br>virtualenvwrapper- virtualenv 的一组扩展。<br>包管理<br>管理包和依赖的工具。<br>pip – Python 包和依赖关系管理工具。<br>pip-tools – 保证 Python 包依赖关系更新的一组工具。<br>conda – 跨平台，Python 二进制包管理工具。<br>Curdling – 管理 Python 包的命令行工具。<br>wheel – Python 分发的新标准，意在取代 eggs。<br>包仓库<br>本地 PyPI 仓库服务和代理。<br>warehouse – 下一代 PyPI。<br>Warehousebandersnatch – PyPA 提供的 PyPI 镜像工具。<br>devpi – PyPI 服务和打包/测试/分发工具。<br>localshop – 本地 PyPI 服务（自定义包并且自动对 PyPI 镜像）。<br>分发<br>打包为可执行文件以便分发。<br>PyInstaller – 将 Python 程序转换成独立的执行文件（跨平台）。<br>dh-virtualenv – 构建并将 virtualenv 虚拟环境作为一个 Debian 包来发布。<br>Nuitka – 将脚本、模块、包编译成可执行文件或扩展模块。<br>py2app – 将 Python 脚本变为独立软件包（Mac OS X）。<br>py2exe – 将 Python 脚本变为独立软件包（Windows）。<br>pynsist – 一个用来创建 Windows 安装程序的工具，可以在安装程序中打包 Python本身。<br>构建工具<br>将源码编译成软件。<br>buildout – 一个构建系统，从多个组件来创建，组装和部署应用。<br>BitBake – 针对嵌入式 Linux 的类似 make 的构建工具。<br>fabricate – 对任何语言自动找到依赖关系的构建工具。<br>PlatformIO – 多平台命令行构建工具。<br>PyBuilder – 纯 Python 实现的持续化构建工具。<br>SCons – 软件构建工具。<br>交互式解析器<br>交互式 Python 解析器。<br>IPython – 功能丰富的工具，非常有效的使用交互式 Python。<br>bpython- 界面丰富的 Python 解析器。<br>ptpython – 高级交互式Python解析器， 构建于python-prompt-toolkit 之上。<br>文件<br>文件管理和 MIME（多用途的网际邮件扩充协议）类型检测。<br>imghdr – （Python 标准库）检测图片类型。<br>mimetypes – （Python 标准库）将文件名映射为 MIME 类型。<br>path.py – 对 os.path 进行封装的模块。<br>pathlib – （Python3.4+ 标准库）跨平台的、面向对象的路径操作库。<br>python-magic- 文件类型检测的第三方库 libmagic 的 Python 接口。<br>Unipath- 用面向对象的方式操作文件和目录<br>watchdog – 管理文件系统事件的 API 和 shell 工具<br>日期和时间<br>操作日期和时间的类库。<br>arrow- 更好的 Python 日期时间操作类库。<br>Chronyk – Python 3 的类库，用于解析手写格式的时间和日期。<br>dateutil – Python datetime 模块的扩展。<br>delorean- 解决 Python 中有关日期处理的棘手问题的库。<br>moment – 一个用来处理时间和日期的Python库。灵感来自于Moment.js。<br>PyTime – 一个简单易用的Python模块，用于通过字符串来操作日期/时间。<br>pytz – 现代以及历史版本的世界时区定义。将时区数据库引入Python。<br>when.py – 提供用户友好的函数来帮助用户进行常用的日期和时间操作。<br>文本处理<br>用于解析和操作文本的库。<br>通用<br>chardet – 字符编码检测器，兼容 Python2 和 Python3。<br>difflib – (Python 标准库)帮助我们进行差异化比较。<br>ftfy – 让Unicode文本更完整更连贯。<br>fuzzywuzzy – 模糊字符串匹配。<br>Levenshtein – 快速计算编辑距离以及字符串的相似度。<br>pangu.py – 在中日韩语字符和数字字母之间添加空格。<br>pyfiglet -figlet 的 Python实现。<br>shortuuid – 一个生成器库，用以生成简洁的，明白的，URL 安全的 UUID。<br>unidecode – Unicode 文本的 ASCII 转换形式 。<br>uniout – 打印可读的字符，而不是转义的字符串。<br>xpinyin – 一个用于把汉字转换为拼音的库。<br>Slug化<br>awesome-slugify – 一个 Python slug 化库，可以保持 Unicode。<br>python-slugify – Python slug 化库，可以把 unicode 转化为 ASCII。<br>unicode-slugify – 一个 slug 工具，可以生成 unicode slugs ,需要依赖 Django 。<br>解析器<br>phonenumbers – 解析，格式化，储存，验证电话号码。<br>PLY – lex 和 yacc 解析工具的 Python 实现。<br>Pygments – 通用语法高亮工具。<br>pyparsing – 生成通用解析器的框架。<br>python-nameparser – 把一个人名分解为几个独立的部分。<br>python-user-agents – 浏览器 user agent 解析器。<br>sqlparse – 一个无验证的 SQL 解析器。<br>特殊文本格式处理<br>一些用来解析和操作特殊文本格式的库。<br>通用<br>tablib – 一个用来处理中表格数据的模块。<br>Office<br>Marmir – 把输入的Python 数据结构转换为电子表单。<br>openpyxl – 一个用来读写 Excel 2010 xlsx/xlsm/xltx/xltm 文件的库。<br>python-docx – 读取，查询以及修改 Microsoft Word 2007/2008 docx 文件。<br>unoconv – 在 LibreOffice/OpenOffice 支持的任意文件格式之间进行转换。<br>XlsxWriter – 一个用于创建 Excel .xlsx 文件的 Python 模块。<br>xlwings – 一个使得在 Excel 中方便调用 Python 的库（反之亦然），基于 BSD 协议。<br>xlwt / xlrd – 读写 Excel 文件的数据和格式信息。<br>relatorio – 模板化OpenDocument 文件。<br>PDF<br>PDFMiner – 一个用于从PDF文档中抽取信息的工具。<br>PyPDF2 – 一个可以分割，合并和转换 PDF 页面的库。<br>ReportLab – 快速创建富文本 PDF 文档。<br>Markdown<br>Mistune – 快速并且功能齐全的纯 Python 实现的 Markdown 解析器。<br>Python-Markdown – John Gruber’s Markdown 的 Python 版实现。<br>YAML<br>PyYAML – Python 版本的 YAML 解析器。<br>CSV<br>csvkit – 用于转换和操作 CSV 的工具。<br>Archive<br>unp – 一个用来方便解包归档文件的命令行工具。<br>自然语言处理<br>用来处理人类语言的库。<br>NLTK – 一个先进的平台，用以构建处理人类语言数据的 Python 程序。<br>jieba – 中文分词工具。<br>langid.py – 独立的语言识别系统。<br>Pattern – Python 网络信息挖掘模块。<br>SnowNLP – 一个用来处理中文文本的库。<br>TextBlob – 为进行普通自然语言处理任务提供一致的 API。<br>TextGrocery – 一简单高效的短文本分类工具，基于 LibLinear 和 Jieba。<br>文档<br>用以生成项目文档的库。<br>Sphinx – Python 文档生成器。<br>awesome-sphinxdoc<br>MkDocs – 对 Markdown 友好的文档生成器。<br>pdoc – 一个可以替换Epydoc 的库，可以自动生成 Python 库的 API 文档。<br>Pycco – 文学编程（literate-programming）风格的文档生成器。<br>配置<br>用来保存和解析配置的库。<br>config – logging 模块作者写的分级配置模块。<br>ConfigObj – INI 文件解析器，带验证功能。<br>ConfigParser – (Python 标准库) INI 文件解析器。<br>profig – 通过多种格式进行配置，具有数值转换功能。<br>python-decouple – 将设置和代码完全隔离。<br>命令行工具<br>用于创建命令行程序的库。<br>命令行程序开发<br>cement – Python 的命令行程序框架。<br>click – 一个通过组合的方式来创建精美命令行界面的包。<br>cliff – 一个用于创建命令行程序的框架，可以创建具有多层命令的命令行程序。<br>clint – Python 命令行程序工具。<br>colorama – 跨平台彩色终端文本。<br>docopt – Python 风格的命令行参数解析器。<br>Gooey – 一条命令，将命令行程序变成一个 GUI 程序。<br>python-prompt-toolkit – 一个用于构建强大的交互式命令行程序的库。<br>生产力工具<br>aws-cli – Amazon Web Services 的通用命令行界面。<br>bashplotlib – 在终端中进行基本绘图。<br>caniusepython3 – 判断是哪个项目妨碍你你移植到 Python 3。<br>cookiecutter – 从 cookiecutters（项目模板）创建项目的一个命令行工具。<br>doitlive – 一个用来在终端中进行现场演示的工具。<br>howdoi – 通过命令行获取即时的编程问题解答。<br>httpie – 一个命令行HTTP 客户端，cURL 的替代品，易用性更好。<br>PathPicker – 从bash输出中选出文件。<br>percol – 向UNIX shell 传统管道概念中加入交互式选择功能。<br>SAWS – 一个加强版的 AWS 命令行。<br>thefuck – 修正你之前的命令行指令。<br>mycli – 一个 MySQL 命令行客户端，具有自动补全和语法高亮功能。<br>pgcli – Postgres 命令行工具，具有自动补全和语法高亮功能。<br>下载器<br>用来进行下载的库.<br>s3cmd – 一个用来管理Amazon S3 和 CloudFront 的命令行工具。<br>s4cmd – 超级 S3 命令行工具，性能更加强劲。<br>you-get – 一个 YouTube/Youku/Niconico 视频下载器，使用 Python3 编写。<br>youtube-dl – 一个小巧的命令行程序，用来下载 YouTube 视频。<br>图像处理<br>用来操作图像的库.<br>pillow – Pillow 是一个更加易用版的 PIL。<br>hmap – 图像直方图映射。<br>imgSeek – 一个使用视觉相似性搜索一组图片集合的项目。<br>nude.py – 裸体检测。<br>pyBarcode – 不借助 PIL 库在 Python 程序中生成条形码。<br>pygram – 类似 Instagram 的图像滤镜。<br>python-qrcode – 一个纯 Python 实现的二维码生成器。<br>Quads – 基于四叉树的计算机艺术。<br>scikit-image – 一个用于（科学）图像处理的 Python 库。<br>thumbor – 一个小型图像服务，具有剪裁，尺寸重设和翻转功能。<br>wand – MagickWand的Python 绑定。MagickWand 是 ImageMagick的 C API 。<br>OCR<br>光学字符识别库。<br>pyocr – Tesseract 和 Cuneiform 的一个封装(wrapper)。<br>pytesseract – Google Tesseract OCR 的另一个封装(wrapper)。<br>python-tesseract – Google Tesseract OCR 的一个包装类。<br>音频<br>用来操作音频的库<br>audiolazy -Python 的数字信号处理包。<br>audioread – 交叉库 (GStreamer + Core Audio + MAD + FFmpeg) 音频解码。<br>beets – 一个音乐库管理工具及 MusicBrainz 标签添加工具<br>dejavu – 音频指纹提取和识别<br>django-elastic-transcoder – Django + Amazon Elastic Transcoder。<br>eyeD3 – 一个用来操作音频文件的工具，具体来讲就是包含 ID3 元信息的 MP3 文件。<br>id3reader – 一个用来读取 MP3 元数据的 Python 模块。<br>m3u8 – 一个用来解析 m3u8 文件的模块。<br>mutagen – 一个用来处理音频元数据的 Python 模块。<br>pydub – 通过简单、简洁的高层接口来操作音频文件。<br>pyechonest – Echo Nest API 的 Python 客户端<br>talkbox – 一个用来处理演讲/信号的 Python 库<br>TimeSide – 开源 web 音频处理框架。<br>tinytag – 一个用来读取MP3, OGG, FLAC 以及 Wave 文件音乐元数据的库。<br>mingus – 一个高级音乐理论和曲谱包，支持 MIDI 文件和回放功能。<br>视频<br>用来操作视频和GIF的库。<br>moviepy – 一个用来进行基于脚本的视频编辑模块，适用于多种格式，包括动图 GIFs。<br>scikit-video – SciPy 视频处理常用程序。<br>地理位置<br>地理编码地址以及用来处理经纬度的库。<br>GeoDjango – 世界级地理图形 web 框架。<br>GeoIP – MaxMind GeoIP Legacy 数据库的 Python API。<br>geojson – GeoJSON 的 Python 绑定及工具。<br>geopy – Python 地址编码工具箱。<br>pygeoip – 纯 Python GeoIP API。<br>django-countries – 一个 Django 应用程序，提供用于表格的国家选择功能，国旗图标静态文件以及模型中的国家字段。<br>HTTP<br>使用HTTP的库。<br>requests – 人性化的HTTP请求库。<br>grequests – requests 库 + gevent ，用于异步 HTTP 请求.<br>httplib2 – 全面的 HTTP 客户端库。<br>treq – 类似 requests 的Python API 构建于 Twisted HTTP 客户端之上。<br>urllib3 – 一个具有线程安全连接池，支持文件 post，清晰友好的 HTTP 库。<br>数据库<br>Python实现的数据库。<br>pickleDB – 一个简单，轻量级键值储存数据库。<br>PipelineDB – 流式 SQL 数据库。<br>TinyDB – 一个微型的，面向文档型数据库。<br>ZODB – 一个 Python 原生对象数据库。一个键值和对象图数据库。<br>数据库驱动<br>用来连接和操作数据库的库。<br>MySQL – awesome-mysql系列<br>mysql-python – Python 的 MySQL 数据库连接器。<br>mysqlclient – mysql-python 分支，支持 Python 3。<br>oursql – 一个更好的 MySQL 连接器，支持原生预编译指令和 BLOBs.<br>PyMySQL – 纯 Python MySQL 驱动，兼容 mysql-python。<br>PostgreSQL<br>psycopg2 – Python 中最流行的 PostgreSQL 适配器。<br>queries – psycopg2 库的封装，用来和 PostgreSQL 进行交互。<br>txpostgres – 基于 Twisted 的异步 PostgreSQL 驱动。<br>其他关系型数据库<br>apsw – 另一个 Python SQLite封装。<br>dataset – 在数据库中存储Python字典 – 可以协同SQLite，MySQL，和 PostgreSQL工作。<br>pymssql- 一个简单的Microsoft SQL Server数据库接口。<br>NoSQL 数据库<br>cassandra-python-driver – Cassandra 的 Python 驱动。<br>HappyBase – 一个为 Apache HBase 设计的，对开发者友好的库。<br>Plyvel – 一个快速且功能丰富的 LevelDB 的 Python 接口。<br>py2neo – Neo4j restful 接口的Python 封装客户端。<br>pycassa – Cassandra 的 Python Thrift 驱动。<br>PyMongo – MongoDB 的官方 Python 客户端。<br>redis-py – Redis 的 Python 客户端。<br>telephus – 基于 Twisted 的 Cassandra 客户端。<br>txRedis – 基于 Twisted 的 Redis 客户端。<br>ORM<br>实现对象关系映射或数据映射技术的库。<br>关系型数据库<br>Django Models – Django 的一部分。<br>SQLAlchemy – Python SQL 工具以及对象关系映射工具。<br>awesome-sqlalchemy系列<br>Peewee – 一个小巧，富有表达力的 ORM。<br>PonyORM – 提供面向生成器的 SQL 接口的 ORM。<br>python-sql – 编写 Python 风格的 SQL 查询。<br>NoSQL 数据库<br>django-mongodb-engine – Django MongoDB 后端。<br>PynamoDB – Amazon DynamoDB 的一个 Python 风格接口。<br>flywheel – Amazon DynamoDB 的对象映射工具。<br>MongoEngine – 一个Python 对象文档映射工具，用于 MongoDB。<br>hot-redis – 为 Redis 提供 Python 丰富的数据类型。<br>redisco – 一个 Python 库，提供可以持续存在在 Redis 中的简单模型和容器。<br>其他<br>butterdb – Google Drive 电子表格的 Python ORM。<br>Web 框架<br>全栈 web 框架。<br>Django – Python 界最流行的 web 框架。<br>awesome-django系列<br>Flask – 一个 Python 微型框架。 <a href="https://github.com/humiaozuzu/awesome-flask系列" target="_blank" rel="noopener">https://github.com/humiaozuzu/awesome-flask系列</a><br>Pyramid – 一个小巧，快速，接地气的开源Python web 框架。<br>awesome-pyramid系列<br>Bottle – 一个快速小巧，轻量级的 WSGI 微型 web 框架。<br>CherryPy – 一个极简的 Python web 框架，服从 HTTP/1.1 协议且具有WSGI 线程池。<br>TurboGears – 一个可以扩展为全栈解决方案的微型框架。<br>web.py – 一个 Python 的 web 框架，既简单，又强大。<br>web2py – 一个全栈 web 框架和平台，专注于简单易用。<br>Tornado – 一个web 框架和异步网络库。<br>权限<br>允许或拒绝用户访问数据或功能的库。<br>Carteblanche – Module to align code with thoughts of users and designers. Also magically handles navigation and permissions.<br>django-guardian – Django 1.2+ 实现了单个对象权限。<br>django-rules – 一个小巧但是强大的应用，提供对象级别的权限管理，且不需要使用数据库。<br>CMS<br>内容管理系统<br>django-cms – 一个开源的，企业级 CMS，基于 Django。<br>djedi-cms – 一个轻量级但却非常强大的 Django CMS ，考虑到了插件，内联编辑以及性能。<br>FeinCMS – 基于 Django 构建的最先进的内容管理系统之一。<br>Kotti – 一个高级的，Python 范的 web 应用框架，基于 Pyramid 构建。<br>Mezzanine – 一个强大的，持续的，灵活的内容管理平台。<br>Opps – 一个为杂志，报纸网站以及大流量门户网站设计的 CMS 平台，基于 Django。<br>Plone – 一个构建于开源应用服务器 Zope 之上的 CMS。<br>Quokka – 灵活，可扩展的小型 CMS，基于 Flask 和 MongoDB。<br>Wagtail – 一个 Django 内容管理系统。<br>Widgy – 最新的 CMS 框架，基于 Django。<br>电子商务<br>用于电子商务以及支付的框架和库。<br>django-oscar – 一个用于 Django 的开源的电子商务框架。<br>django-shop – 一个基于 Django 的店铺系统。<br>Cartridge – 一个基于 Mezzanine 构建的购物车应用。<br>shoop – 一个基于 Django 的开源电子商务平台。<br>alipay – 非官方的 Python 支付宝 API。<br>merchant – 一个可以接收来自多种支付平台支付的 Django 应用。<br>money – 货币类库with optional CLDR-backed locale-aware formatting and an extensible currency exchange solution.<br>python-currencies – 显示货币格式以及它的数值。<br>RESTful API<br>用来开发RESTful APIs的库<br>Django<br>django-rest-framework – 一个强大灵活的工具，用来构建 web API。<br>django-tastypie – 为Django 应用开发API。<br>django-formapi – 为 Django 的表单验证，创建 JSON APIs 。<br>Flask<br>flask-api – 为 flask 开发的，可浏览 Web APIs 。<br>flask-restful – 为 flask 快速创建REST APIs 。<br>flask-restless – 为 SQLAlchemy 定义的数据库模型创建 RESTful APIs 。<br>flask-api-utils – 为 Flask 处理 API 表示和验证。<br>eve – REST API 框架，由 Flask, MongoDB 等驱动。<br>Pyramid<br>cornice – 一个Pyramid 的 REST 框架 。<br>与框架无关的<br>falcon – 一个用来建立云 API 和 web app 后端的噶性能框架。<br>sandman – 为现存的数据库驱动系统自动创建 REST APIs 。<br>restless – 框架无关的 REST 框架 ，基于从 Tastypie 学到的知识。<br>ripozo – 快速创建 REST/HATEOAS/Hypermedia APIs。<br>验证<br>实现验证方案的库。<br>OAuth<br>Authomatic – 简单但是强大的框架，身份验证/授权客户端。<br>django-allauth – Django 的验证应用。<br>django-oauth-toolkit – 为 Django 用户准备的 OAuth2。<br>django-oauth2-provider – 为 Django 应用提供 OAuth2 接入。<br>Flask-OAuthlib – OAuth 1.0/a, 2.0 客户端实现，供 Flask 使用。<br>OAuthLib – 一个 OAuth 请求-签名逻辑通用、 完整的实现。<br>python-oauth2 – 一个完全测试的抽象接口。用来创建 OAuth 客户端和服务端。<br>python-social-auth – 一个设置简单的社会化验证方式。<br>rauth – OAuth 1.0/a, 2.0, 和 Ofly 的 Python 库。<br>sanction – 一个超级简单的OAuth2 客户端实现。<br>其他<br>jose – JavaScript 对象签名和加密草案的实现。<br>PyJWT – JSON Web 令牌草案 01。<br>python-jws – JSON Web 签名草案 02 的实现。<br>python-jwt – 一个用来生成和验证 JSON Web 令牌的模块。<br>模板引擎<br>模板生成和词法解析的库和工具。<br>Jinja2 – 一个现代的，对设计师友好的模板引擎。<br>Chameleon – 一个 HTML/XML 模板引擎。 模仿了 ZPT（Zope Page Templates）, 进行了速度上的优化。<br>Genshi – Python 模板工具，用以生成 web 感知的结果。<br>Mako – Python 平台的超高速轻量级模板。<br>Queue<br>处理事件以及任务队列的库。<br>celery – 一个异步任务队列/作业队列，基于分布式消息传递。<br>huey – 小型多线程任务队列。<br>mrq – Mr. Queue -一个 Python 的分布式 worker 任务队列， 使用 Redis 和 gevent。<br>rq – 简单的 Python 作业队列。<br>simpleq – 一个简单的，可无限扩张的，基于亚马逊 SQS 的队列。<br>搜索<br>对数据进行索引和执行搜索查询的库和软件。<br>django-haystack – Django 模块化搜索。<br>elasticsearch-py – Elasticsearch 的官方底层 Python 客户端。<br>elasticsearch-dsl-py -Elasticsearch 的官方高级 Python 客户端。<br>solrpy – solr的 Python 客户端。<br>Whoosh – 一个快速的纯 Python 搜索引擎库。<br>动态消息<br>用来创建用户活动的库。<br>django-activity-stream – 从你的站点行为中生成通用活动信息流。<br>Stream-Framework – 使用 Cassandra 和 Redis 创建动态消息和通知系统。<br>资源管理<br>管理、压缩、缩小网站资源的工具。<br>django-compressor – 将链接和内联的 JavaScript 或 CSS 压缩到一个单独的缓存文件中。<br>django-storages – 一个针对 Django 的自定义存储后端的工具集合。<br>fanstatic – 打包、优化，并且把静态文件依赖作为 Python 的包来提供。<br>File Conveyor – 一个后台驻留的程序，用来发现和同步文件到 CDNs, S3 和 FTP。<br>Flask-Assets – 帮你将 web 资源整合到你的 Flask app 中。<br>jinja-assets-compressor – 一个 Jinja 扩展，用来编译和压缩你的资源。<br>webassets – 为你的静态资源打包、优化和管理生成独一无二的缓存 URL。<br>缓存<br>缓存数据的库。<br>Beaker – 一个缓存和会话库，可以用在 web 应用和独立 Python脚本和应用上。<br>django-cache-machine – Django 模型的自动缓存和失效。<br>django-cacheops- 具有自动颗粒化事件驱动失效功能的 ORM。<br>django-viewlet – 渲染模板，同时具有额外的缓存控制功能。<br>dogpile.cache – dogpile.cache 是 Beaker 的下一代替代品，由同一作者开发。<br>HermesCache – Python 缓存库，具有基于标签的失效和 dogpile effect 保护功能。<br>johnny-cache – django应用缓存框架。<br>pylibmc – libmemcached 接口的 Python 封装。<br>电子邮件<br>用来发送和解析电子邮件的库。<br>django-celery-ses – 带有 AWS SES 和 Celery 的 Django email 后端。<br>envelopes – 供人类使用的电子邮件库。<br>flanker – 一个 email 地址和 Mime 解析库。<br>imbox – Python IMAP 库<br>inbox.py – Python SMTP 服务器。<br>inbox – 一个开源电子邮件工具箱。<br>lamson – Python 风格的 SMTP 应用服务器。<br>mailjet – Mailjet API 实现，用来提供批量发送邮件，统计等功能。<br>marrow.mailer – 高性能可扩展邮件分发框架。<br>modoboa – 一个邮件托管和管理平台，具有现代的、简约的 Web UI。<br>pyzmail – 创建，发送和解析电子邮件。<br>Talon – Mailgun 库，用来抽取信息和签名。<br>国际化<br>用来进行国际化的库。<br>Babel – 一个Python 的国际化库。<br>Korean – 一个韩语词态库。<br>URL处理<br>解析URLs的库<br>furl – 一个让处理 URL 更简单小型 Python 库。<br>purl – 一个简单的，不可变的URL类，具有简洁的 API 来进行询问和处理。<br>pyshorteners – 一个纯 Python URL 缩短库。<br>shorturl- 生成短小 URL 和类似 <a href="http://bit.ly" target="_blank" rel="noopener">http://bit.ly</a> 短链的Python 实现。<br>webargs – 一个解析 HTTP 请求参数的库，内置对流行 web 框架的支持，包括 Flask, Django, Bottle, Tornado和 Pyramid。<br>HTML处理<br>处理 HTML和XML的库。<br>BeautifulSoup – 以 Python 风格的方式来对 HTML 或 XML 进行迭代，搜索和修改。<br>bleach – 一个基于白名单的 HTML 清理和文本链接库。<br>cssutils – 一个 Python 的 CSS 库。<br>html5lib – 一个兼容标准的 HTML 文档和片段解析及序列化库。<br>lxml – 一个非常快速，简单易用，功能齐全的库，用来处理 HTML 和 XML。<br>MarkupSafe – 为Python 实现 XML/HTML/XHTML 标记安全字符串。<br>pyquery – 一个解析 HTML 的库，类似 jQuery。<br>untangle – 将XML文档转换为Python对象，使其可以方便的访问。<br>xhtml2pdf – HTML/CSS 转 PDF 工具。<br>xmltodict – 像处理 JSON 一样处理 XML。<br>网络站点爬取<br>爬取网络站点的库<br>Scrapy – 一个快速高级的屏幕爬取及网页采集框架。<br>cola – 一个分布式爬虫框架。<br>Demiurge – 基于PyQuery 的爬虫微型框架。<br>feedparser – 通用 feed 解析器。<br>Grab – 站点爬取框架。<br>MechanicalSoup – 用于自动和网络站点交互的 Python 库。<br>portia – Scrapy 可视化爬取。<br>pyspider – 一个强大的爬虫系统。<br>RoboBrowser – 一个简单的，Python 风格的库，用来浏览网站，而不需要一个独立安装的浏览器。<br>网页内容提取<br>用于进行网页内容提取的库。<br>Haul – 一个可以扩展的图像爬取工具。<br>html2text – 将 HTML 转换为 Markdown 格式文本<br>lassie – 人性化的网页内容检索库。<br>micawber -一个小型网页内容提取库，用来从 URLs 提取富内容。<br>newspaper – 使用 Python 进行新闻提取，文章提取以及内容策展。<br>opengraph – 一个用来解析开放内容协议(Open Graph Protocol)的 Python模块。<br>python-goose – HTML内容/文章提取器。<br>python-readability- arc90 公司 readability 工具的 Python 高速端口<br>sanitize – 为杂乱的数据世界带来调理性。<br>sumy – 一个为文本文件和 HTML 页面进行自动摘要的模块。<br>textract – 从任何格式的文档中提取文本，Word，PowerPoint，PDFs 等等。<br>表单<br>进行表单操作的库。<br>Deform – Python HTML 表单生成库，受到了 formish 表单生成库的启发。<br>django-bootstrap3- 集成了 Bootstrap 3 的 Django。<br>django-crispy-forms – 一个 Django 应用，他可以让你以一种非常优雅且 DRY（Don’t repeat yourself） 的方式来创建美观的表单。<br>django-remote-forms- 一个平台独立的 Django 表单序列化工具。<br>WTForms – 一个灵活的表单验证和呈现库。<br>WTForms-JSON- 一个 WTForms 扩展，用来处理 JSON 数据。<br>数据验证<br>数据验证库。多用于表单验证。<br>Cerberus – A mappings-validator with a variety of rules, normalization-features and simple customization that uses a pythonic schema-definition.<br>colander – 一个用于对从 XML, JSON，HTML 表单获取的数据或其他同样简单的序列化数据进行验证和反序列化的系统。<br>kmatch – 一种用于匹配/验证/筛选 Python 字典的语言。<br>schema -一个用于对 Python 数据结构进行验证的库。<br>Schematics – 数据结构验证。<br>valideer – 轻量级可扩展的数据验证和适配库。<br>voluptuous – 一个 Python 数据验证库。主要是为了验证传入 Python的 JSON，YAML 等数据。<br>反垃圾技术<br>帮助你和电子垃圾进行战斗的库。<br>django-simple-captcha – 一个简单、高度可定制的Django 应用，可以为任何Django表单添加验证码。<br>django-simple-spam-blocker- 一个用于Django的简单的电子垃圾屏蔽工具。<br>标记<br>用来进行标记的库。<br>django-taggit – 简单的 Django 标记工具。<br>管理面板<br>管理界面库。<br>Ajenti – 一个你的服务器值得拥有的管理面板。<br>django-suit – Django 管理界面的一个替代品 (仅对于非商业用途是免费的)。<br>django-xadmin – Django admin 的一个替代品，具有很多不错的功能。<br>flask-admin – 一个用于 Flask 的简单可扩展的管理界面框架。<br>flower – 一个对 Celery 集群进行实时监控和提供 web 管理界面的工具。<br>Grappelli – Django 管理界面的一个漂亮的皮肤。<br>Wooey – 一个 Django 应用，可以为 Python 脚本创建 web 用户界面。<br>静态站点生成器<br>静态站点生成器是一个软件，它把文本和模板作为输入，然后输出HTML文件。<br>Pelican – 使用 Markdown 或 ReST 来处理内容， Jinja 2 来制作主题。支持 DVCS, Disqus.。AGPL 许可。<br>Cactus – 为设计师设计的静态站点生成器。<br>Hyde – 基于 Jinja2 的静态站点生成器。<br>Nikola – 一个静态网站和博客生成器。<br>Tinkerer – Tinkerer 是一个博客引擎/静态站点生成器，由Sphinx驱动。<br>Lektor – 一个简单易用的静态 CMS 和博客引擎。<br>进程<br>操作系统进程启动及通信库。<br>envoy – 比 Python subprocess 模块更人性化。<br>sarge – 另一 种 subprocess 模块的封装。<br>sh – 一个完备的 subprocess 替代库。<br>并发和并行<br>用以进行并发和并行操作的库。<br>multiprocessing – (Python 标准库) 基于进程的“线程”接口。<br>threading – (Python 标准库)更高层的线程接口。<br>eventlet – 支持 WSGI 的异步框架。<br>gevent – 一个基于协程的 Python 网络库，使用greenlet。<br>Tomorrow -用于产生异步代码的神奇的装饰器语法实现。<br>网络<br>用于网络编程的库。<br>asyncio – (Python 标准库) 异步 I/O, 事件循环, 协程以及任务。<br>Twisted – 一个事件驱动的网络引擎。<br>pulsar – 事件驱动的并发框架。<br>diesel – 基于Greenlet 的事件 I/O 框架。<br>pyzmq – 一个 ZeroMQ 消息库的 Python 封装。<br>txZMQ – 基于 Twisted 的 ZeroMQ 消息库的 Python 封装。<br>WebSocket<br>帮助使用WebSocket的库。<br>AutobahnPython – 给 Python 、使用的 WebSocket &amp; WAMP 基于 Twisted 和 asyncio。<br>Crossbar – 开源统一应用路由(Websocket &amp; WAMP for Python on Autobahn).<br>django-socketio – 给 Django 用的 WebSockets。<br>WebSocket-for-Python – 为Python2/3 以及 PyPy 编写的 WebSocket 客户端和服务器库。<br>WSGI 服务器<br>兼容 WSGI 的 web 服务器<br>gunicorn – Pre-forked, 部分是由 C 语言编写的。<br>uwsgi – uwsgi 项目的目的是开发一组全栈工具，用来建立托管服务， 由 C 语言编写。<br>bjoern – 异步，非常快速，由 C 语言编写。<br>fapws3 – 异步 (仅对于网络端)，由 C 语言编写。<br>meinheld – 异步，部分是由 C 语言编写的。<br>netius – 异步，非常快速。<br>paste – 多线程，稳定，久经考验。<br>rocket – 多线程。<br>waitress – 多线程, 是它驱动着 Pyramid 框架。<br>Werkzeug – 一个 WSGI 工具库，驱动着 Flask ，而且可以很方便大嵌入到你的项目中去。<br>RPC 服务器<br>兼容 RPC 的服务器。<br>SimpleJSONRPCServer – 这个库是 JSON-RPC 规范的一个实现。<br>SimpleXMLRPCServer – (Python 标准库) 简单的 XML-RPC 服务器实现，单线程。<br>zeroRPC – zerorpc 是一个灵活的 RPC 实现，基于 ZeroMQ 和 MessagePack。<br>密码学<br>cryptography – 这个软件包意在提供密码学基本内容和方法提供给 Python 开发者。<br>hashids – 在 Python 中实现 hashids 。<br>Paramiko – SSHv2 协议的 Python (2.6+, 3.3+) ，提供客户端和服务端的功能。<br>Passlib – 安全密码存储／哈希库，<br>PyCrypto – Python 密码学工具箱。<br>PyNacl – 网络和密码学(NaCl) 库的 Python 绑定。<br>图形用户界面<br>用来创建图形用户界面程序的库。<br>curses – 内建的 ncurses 封装，用来创建终端图形用户界面。<br>enaml – 使用类似 QML 的Declaratic语法来创建美观的用户界面。<br>kivy – 一个用来创建自然用户交互（NUI）应用程序的库，可以运行在 Windows, Linux, Mac OS X, Android 以及 iOS平台上。<br>pyglet – 一个Python 的跨平台窗口及多媒体库。<br>PyQt – 跨平台用户界面框架 Qt 的 Python 绑定 ，支持Qt v4 和 Qt v5。<br>PySide – P跨平台用户界面框架 Qt 的 Python 绑定 ，支持Qt v4。<br>Tkinter – Tkinter 是 Python GUI 的一个事实标准库。<br>Toga – 一个 Python 原生的, 操作系统原生的 GUI 工具包。<br>urwid – 一个用来创建终端 GUI 应用的库，支持组件，事件和丰富的色彩等。<br>wxPython – wxPython 是 wxWidgets C++ 类库和 Python 语言混合的产物。<br>PyGObject – GLib/GObject/GIO/GTK+ (GTK+3) 的 Python 绑定<br>Flexx – Flexx 是一个纯 Python 语言编写的用来创建 GUI 程序的工具集，它使用 web 技术进行界面的展示。<br>游戏开发<br>超赞的游戏开发库。<br>Cocos2d – cocos2d 是一个用来开发 2D 游戏， 示例和其他图形/交互应用的框架。基于 pyglet。<br>Panda3D – 由迪士尼开发的 3D 游戏引擎，并由卡内基梅陇娱乐技术中心负责维护。使用C++编写, 针对 Python 进行了完全的封装。<br>Pygame – Pygame 是一组 Python 模块，用来编写游戏。<br>PyOgre – Ogre 3D 渲染引擎的 Python 绑定，可以用来开发游戏和仿真程序等任何 3D 应用。<br>PyOpenGL – OpenGL 的 Python 绑定及其相关 APIs。<br>PySDL2 – SDL2 库的封装，基于 ctypes。<br>RenPy – 一个视觉小说（visual novel）引擎。<br>日志<br>用来生成和操作日志的库。<br>logging – (Python 标准库) 为 Python 提供日志功能。<br>logbook – Logging 库的替代品。<br>Eliot – 为复杂的和分布式系统创建日志。<br>Raven – Sentry的 Python 客户端。<br>Sentry – 实时记录和收集日志的服务器。<br>测试<br>进行代码库测试和生成测试数据的库。<br>测试框架<br>unittest – (Python 标准库) 单元测试框架。<br>nose – nose 扩展了 unittest 的功能。<br>contexts – 一个 Python 3.3+ 的 BDD 框架。受到C# – Machine.Specifications的启发。<br>hypothesis – Hypothesis 是一个基于先进的 Quickcheck 风格特性的测试库。<br>mamba – Python 的终极测试工具， 拥护BDD。<br>PyAutoGUI – PyAutoGUI 是一个人性化的跨平台 GUI 自动测试模块。<br>pyshould- Should 风格的断言，基于 PyHamcrest。<br>pytest- 一个成熟的全功能 Python 测试工具。<br>green- 干净，多彩的测试工具。<br>pyvows- BDD 风格的测试工具，受Vows.js的启发。<br>Robot Framework – 一个通用的自动化测试框架。<br>Web 测试<br>Selenium – Selenium WebDriver 的 Python 绑定。<br>locust – 使用 Python 编写的，可扩展的用户加载测试工具。<br>sixpack – 一个和语言无关的 A/B 测试框架。<br>splinter – 开源的 web 应用测试工具。<br>Mock测试<br>mock – (Python 标准库) 一个用于伪造测试的库。<br>doublex – Python 的一个功能强大的 doubles 测试框架。<br>freezegun – 通过伪造日期模块来生成不同的时间。<br>httmock – 针对 Python 2.6+ 和 3.2+ 生成 伪造请求的库。<br>httpretty – Python 的 HTTP 请求 mock 工具。<br>responses – 伪造 Python 中的 requests 库的一个通用库。<br>VCR.py – 在你的测试中记录和重放 HTTP 交互。<br>对象工厂<br>factoryboy – 一个 Python 用的测试固件 (test fixtures) 替代库。<br>mixer – 另外一个测试固件 (test fixtures) 替代库，支持 Django, Flask, SQLAlchemy, Peewee 等。<br>modelmommy – 为 Django 测试创建随机固件<br>代码覆盖率<br>coverage – 代码覆盖率测量。<br>伪数据<br>faker – 一个 Python 库，用来生成伪数据。<br>fake2db – 伪数据库生成器。<br>radar – 生成随机的日期/时间。<br>错误处理<br>FuckIt.py – FuckIt.py 使用最先进的技术来保证你的 Python 代码无论对错都能继续运行。<br>代码分析和Lint工具<br>进行代码分析，解析和操作代码库的库和工具。<br>代码分析<br>code2flow – 把你的 Python 和 JavaScript 代码转换为流程图。<br>pycallgraph -这个库可以把你的Python 应用的流程(调用图)进行可视化。<br>pysonar2 – Python 类型推断和检索工具。<br>Lint工具<br>Flake8 – 模块化源码检查工具: pep8, pyflakes 以及 co。<br>Pylint – 一个完全可定制的源码分析器。<br>pylama – Python 和 JavaScript 的代码审查工具。<br>调试工具<br>用来进行代码调试的库。<br>调试器<br>ipdb – IPython 启用的 pdb。<br>pudb – 全屏，基于控制台的 Python 调试器。<br>pyringe – 可以在 Python 进程中附加和注入代码的调试器。<br>wdb – 一个奇异的 web 调试器，通过 WebSockets 工作。<br>winpdb – 一个具有图形用户界面的 Python 调试器，可以进行远程调试，基于 rpdb2。<br>django-debug-toolbar – 为 Django 显示各种调试信息。<br>django-devserver – 一个 Django 运行服务器的替代品。<br>flask-debugtoolbar – django-debug-toolbar 的 flask 版。<br>性能分析器<br>lineprofiler – 逐行性能分析。<br>memoryprofiler – 监控 Python 代码的内存使用。<br>profiling – 一个交互式 Python 性能分析工具。<br>其他<br>pyelftools – 解析和分析 ELF 文件以及 DWARF 调试信息。<br>python-statsd – statsd 服务器的 Python 客户端。<br>科学技术和数据分析<br>用来进行科学计算和数据分析的库。<br>astropy – 一个天文学 Python 库。<br>bcbio-nextgen – 这个工具箱为全自动高通量测序分析提供符合最佳实践的处理流程。<br>bccb – 生物分析相关代码集合<br>Biopython – Biopython 是一组可以免费使用的用来进行生物计算的工具。<br>blaze – NumPy 和 Pandas 的大数据接口。<br>cclib – 一个用来解析和解释计算化学软件包输出结果的库。<br>NetworkX – 一个为复杂网络设计的高性能软件。<br>Neupy – 执行和测试各种不同的人工神经网络算法。<br>Numba – Python JIT (just in time) 编译器，针对科学用的 Python ，由Cython 和 NumPy 的开发者开发。<br>NumPy – 使用 Python 进行科学计算的基础包。<br>Open Babel – 一个化学工具箱，用来描述多种化学数据。<br>Open Mining – 使用 Python 挖掘商业情报 (BI) (Pandas web 接口)。<br>orange – 通过可视化编程或 Python 脚本进行数据挖掘，数据可视化，分析和机器学习。<br>Pandas – 提供高性能，易用的数据结构和数据分析工具。<br>PyDy – PyDy 是 Python Dynamics 的缩写，用来为动力学运动建模工作流程提供帮助， 基于 NumPy, SciPy, IPython 和 matplotlib。<br>PyMC – 马尔科夫链蒙特卡洛采样工具。<br>RDKit – 化学信息学和机器学习软件。<br>SciPy – 由一些基于 Python ，用于数学，科学和工程的开源软件构成的生态系统。<br>statsmodels – 统计建模和计量经济学。<br>SymPy – 一个用于符号数学的 Python 库。<br>zipline – 一个 Python 算法交易库。<br>数据可视化<br>进行数据可视化的库。 参见: awesome-javascript。<br>matplotlib – 一个 Python 2D 绘图库。<br>bokeh – 用 Python 进行交互式 web 绘图。<br>ggplot – ggplot2 给 R 提供的 API 的 Python 版本。<br>plotly – 协同 Python 和 matplotlib 工作的 web 绘图库。<br>pygal – 一个 Python SVG 图表创建工具。<br>pygraphviz – Graphviz 的 Python 接口。<br>PyQtGraph – 交互式实时2D/3D/图像绘制及科学/工程学组件。<br>SnakeViz – 一个基于浏览器的 Python’s cProfile 模块输出结果查看工具。<br>vincent – 把 Python 转换为 Vega 语法的转换工具。<br>VisPy – 基于 OpenGL 的高性能科学可视化工具。<br>计算机视觉<br>计算机视觉库。<br>OpenCV – 开源计算机视觉库。<br>SimpleCV – 一个用来创建计算机视觉应用的开源框架。<br>机器学习<br>机器学习库。 参见: awesome-machine-learning.<br>Crab – 灵活、快速的推荐引擎。<br>gensim – 人性化的话题建模库。<br>hebel – GPU 加速的深度学习库。<br>NuPIC – 智能计算 Numenta 平台。<br>pattern – Python 网络挖掘模块。<br>PyBrain – 另一个 Python 机器学习库。<br>Pylearn2 – 一个基于 Theano 的机器学习库。<br>python-recsys – 一个用来实现推荐系统的 Python 库。<br>scikit-learn – 基于 SciPy 构建的机器学习 Python 模块。<br>pydeep – Python 深度学习库。<br>vowpalporpoise – 轻量级 Vowpal Wabbit 的 Python 封装。<br>skflow – 一个 TensorFlow 的简化接口(模仿 scikit-learn)。<br>MapReduce<br>MapReduce 框架和库。<br>dpark – Spark 的 Python 克隆版，一个类似 MapReduce 的框架。<br>dumbo – 这个 Python 模块可以让人轻松的编写和运行 Hadoop 程序。<br>luigi – 这个模块帮你构建批处理作业的复杂流水线。<br>mrjob – 在 Hadoop 或 Amazon Web Services 上运行 MapReduce 任务。<br>PySpark – Spark 的 Python API 。<br>streamparse – 运行针对事实数据流的 Python 代码。集成了Apache Storm。<br>函数式编程<br>使用 Python 进行函数式编程。<br>CyToolz – Toolz 的 Cython 实现 : 高性能函数式工具。<br>fn.py – 在 Python 中进行函数式编程 : 实现了一些享受函数式编程缺失的功能。<br>funcy – 炫酷又实用的函数式工具。<br>Toolz – 一组用于迭代器，函数和字典的函数式编程工具。<br>第三方 API<br>用来访问第三方 API的库。 参见： List of Python API Wrappers and Libraries。<br>apache-libcloud – 一个为各种云设计的 Python 库。<br>boto – Amazon Web Services 的 Python 接口。<br>django-wordpress – WordPress models and views for Django.<br>facebook-sdk – Facebook 平台的 Python SDK.<br>facepy – Facepy 让和 Facebook’s Graph API 的交互变得更容易。<br>gmail – Gmail 的 Python 接口。<br>google-api-python-client – Python 用的 Google APIs 客户端库。<br>gspread – Google 电子表格的 Python API.<br>twython – Twitter API 的封装。<br>DevOps 工具<br>用于 DevOps 的软件和库。<br>Ansible – 一个非常简单的 IT 自动化平台。<br>SaltStack – 基础设施自动化和管理系统。<br>OpenStack – 用于构建私有和公有云的开源软件。<br>Docker Compose – 快速，分离的开发环境，使用 Docker。<br>Fabric – 一个简单的，Python 风格的工具，用来进行远程执行和部署。<br>cuisine – 为 Fabric 提供一系列高级函数。<br>Fabtools – 一个用来编写超赞的 Fabric 文件的工具。<br>gitapi – Git 的纯 Python API。<br>hgapi – Mercurial 的纯 Python API。<br>honcho – Foreman的 Python 克隆版，用来管理基于Procfile的应用。<br>pexpect – Controlling interactive programs in a pseudo-terminal like 在一个伪终端中控制交互程序，就像 GNU expect 一样。<br>psutil – 一个跨平台进程和系统工具模块。<br>supervisor – UNIX 的进程控制系统。<br>任务调度<br>任务调度库。<br>APScheduler – 轻巧但强大的进程内任务调度，使你可以调度函数。<br>django-schedule – 一个 Django 排程应用。<br>doit – 一个任务执行和构建工具。<br>gunnery – 分布式系统使用的多用途任务执行工具 ，具有 web 交互界面。<br>Joblib – 一组为 Python 提供轻量级作业流水线的工具。<br>Plan – 如有神助地编写 crontab 文件。<br>schedule – 人性化的 Python 任务调度库。<br>Spiff – 使用纯 Python 实现的强大的工作流引擎。<br>TaskFlow – 一个可以让你方便执行任务的 Python 库，一致并且可靠。<br>外来函数接口<br>使用外来函数接口的库。<br>cffi – 用来调用 C 代码的外来函数接口。<br>ctypes – (Python 标准库) 用来调用 C 代码的外来函数接口。<br>PyCUDA – Nvidia CUDA API 的封装。<br>SWIG – 简化的封装和接口生成器。<br>高性能<br>让 Python 更快的库。<br>Cython – 优化的 Python 静态编译器。使用类型混合使 Python 编译成 C 或 C++ 模块来获得性能的极大提升。<br>PeachPy – 嵌入 Python 的 x86-64 汇编器。可以被用作 Python 内联的汇编器或者是独立的汇编器，用于 Windows, Linux, OS X, Native Client 或者 Go 。<br>PyPy – 使用 Python 实现的 Python。解释器使用黑魔法加快 Python 运行速度且不需要加入额外的类型信息。<br>Pyston – 使用 LLVM 和现代 JIT 技术构建的 Python 实现，目标是为了获得很好的性能。<br>Stackless Python – 一个强化版的 Python。<br>微软的 Windows平台<br>在 Windows 平台上进行 Python 编程。<br>Python(x,y) – 面向科学应用的 Python 发行版，基于 Qt 和 Spyder。<br>pythonlibs – 非官方的 Windows 平台 Python 扩展二进制包。<br>PythonNet – Python 与 .NET 公共语言运行库 (CLR)的集成。<br>PyWin32 – 针对 Windows 的Python 扩展。<br>WinPython – Windows 7/8 系统下便携式开发环境。<br>网络可视化和SDN<br>用来进行网络可视化和SDN(软件定义网络)的工具和库。<br>Mininet – 一款流行的网络模拟器以及用 Python 编写的 API。<br>POX – 一个针对基于 Python 的软件定义网络应用（例如 OpenFlow SDN 控制器）的开源开发平台。<br>Pyretic – 火热的 SDN 编程语言中的一员，为网络交换机和模拟器提供强大的抽象能力。<br>SDX Platform – 基于 SDN 的 IXP 实现，影响了 Mininet, POX 和 Pyretic。<br>硬件<br>用来对硬件进行编程的库。<br>ino -操作Arduino的命令行工具。<br>Pyro – Python 机器人编程库。<br>PyUserInput – 跨平台的，控制鼠标和键盘的模块。<br>scapy – 一个非常棒的操作数据包的库。<br>wifi – 一个 Python 库和命令行工具用来在 Linux 平台上操作WiFi。<br>Pingo – Pingo 为类似Raspberry Pi，pcDuino， Intel Galileo等设备提供统一的API用以编程。<br>兼容性<br>帮助从 Python 2 向 Python 3迁移的库。<br>Python-Future – 这就是 Python 2 和 Python 3 之间丢失的那个兼容性层。<br>Python-Modernize – 使 Python 代码更加现代化以便最终迁移到 Python 3。<br>Six – Python 2 和 3 的兼容性工具。<br>杂项<br>不属于上面任何一个类别，但是非常有用的库。<br>blinker – 一个快速的 Python 进程内信号/事件分发系统。<br>itsdangerous – 一系列辅助工具用来将可信的数据传入不可信的环境。<br>pluginbase – 一个简单但是非常灵活的 Python 插件系统。<br>Pychievements – 一个用来创建和追踪成就的 Python 框架。<br>Tryton – 一个通用商务框架。<br>算法和设计模式<br>Python 实现的算法和设计模式。<br>algorithms -一个 Python 算法模块<br>python-patterns – Python 设计模式的集合。<br>sortedcontainers – 快速，纯 Python 实现的SortedList，SortedDict 和 SortedSet 类型。<br>编辑器插件<br>编辑器和 IDE 的插件<br>Emacs<br>Elpy – Emacs Python 开发环境。<br>Sublime Text<br>SublimeJEDI – 一个 Sublime Text 插件，用来使用超赞的自动补全库 Jedi。<br>Anaconda – Anaconda 把你的 Sublime Text 3 变成一个功能齐全的 Python IDE。<br>Vim<br>YouCompleteMe – 引入基于 Jedi 的 Python 自动补全引擎。<br>Jedi-vim – 绑定 Vim 和 Jedi 自动补全库对 Python 进行自动补全。<br>Python-mode – 将 Vim 变成 Python IDE 的一款多合一插件。<br>Visual Studio<br>PTVS – Visual Studio 的 Python 工具<br>集成开发环境<br>流行的 Python 集成开发环境。<br>PyCharm – 商业化的 Python IDE ，由 JetBrains 开发。也有免费的社区版提供。<br>LiClipse – 基于 Eclipse 的免费多语言 IDE 。使用 PyDev 来支持 Python 。<br>Spyder – 开源 Python IDE。<br>服务<br>在线工具和简化开发的 API 。<br>持续集成<br>参见: awesome-CIandCD.<br>Travis CI – 一个流行的工具，为你的开源和私人项目提供持续集成服务。(仅支持 GitHub)<br>CircleCI – 一个持续集成工具，可以非常快速的进行并行测试。 (仅支持 GitHub)<br>Vexor CI – 一个为私人 app 提供持续集成的工具，支持按分钟付费。<br>Wercker – 基于 Docker 平台，用来构建和部署微服务。<br>代码质量<br>Codacy – 自动化代码审查，更加快速的发布高质量代码。对于开源项目是免费的。<br>QuantifiedCode – 一个数据驱动、自动、持续的代码审查工具。<br>资源<br>在这里可以找到新的 Python 库。<br>网站<br>r/Python<br>CoolGithubProjects<br>Django Packages<br>Full Stack Python<br>Python 3 Wall of Superpowers<br>Python Hackers<br>Python ZEEF<br>Trending Python repositories on GitHub today<br>PyPI Ranking<br>周刊<br>Import Python Newsletter<br>Pycoder’s Weekly<br>Python Weekly<br>Twitter</p>
+]]></content>
+      <categories>
+        <category>编程</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python signal信号</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/python/python-signal%E4%BF%A1%E5%8F%B7/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/5b8bb7df-4ebb-445b-be33-03d193a2a982?title=1%E3%80%81python%20signal%E4%BF%A1%E5%8F%B7" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/5b8bb7df-4ebb-445b-be33-03d193a2a982?title=1%E3%80%81python%20signal%E4%BF%A1%E5%8F%B7</a></p>
+]]></content>
+      <categories>
+        <category>编程</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>shell基础-单引号、双引号和反引号用法|小括号和大括号用法及区别</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/other/shell%E5%9F%BA%E7%A1%80-%E5%8D%95%E5%BC%95%E5%8F%B7%E3%80%81%E5%8F%8C%E5%BC%95%E5%8F%B7%E5%92%8C%E5%8F%8D%E5%BC%95%E5%8F%B7%E7%94%A8%E6%B3%95-%E5%B0%8F%E6%8B%AC%E5%8F%B7%E5%92%8C%E5%A4%A7%E6%8B%AC%E5%8F%B7%E7%94%A8%E6%B3%95%E5%8F%8A%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/dde696d7-e4d8-45fc-8019-21863c363557?title=1%E3%80%81shell%E5%9F%BA%E7%A1%80-%E5%8D%95%E5%BC%95%E5%8F%B7%E3%80%81%E5%8F%8C%E5%BC%95%E5%8F%B7%E5%92%8C%E5%8F%8D%E5%BC%95%E5%8F%B7%E7%94%A8%E6%B3%95%7C%E5%B0%8F%E6%8B%AC%E5%8F%B7%E5%92%8C%E5%A4%A7%E6%8B%AC%E5%8F%B7%E7%94%A8%E6%B3%95%E5%8F%8A%E5%8C%BA%E5%88%AB" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/dde696d7-e4d8-45fc-8019-21863c363557?title=1%E3%80%81shell%E5%9F%BA%E7%A1%80-%E5%8D%95%E5%BC%95%E5%8F%B7%E3%80%81%E5%8F%8C%E5%BC%95%E5%8F%B7%E5%92%8C%E5%8F%8D%E5%BC%95%E5%8F%B7%E7%94%A8%E6%B3%95%7C%E5%B0%8F%E6%8B%AC%E5%8F%B7%E5%92%8C%E5%A4%A7%E6%8B%AC%E5%8F%B7%E7%94%A8%E6%B3%95%E5%8F%8A%E5%8C%BA%E5%88%AB</a></p>
+]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>运动学位置预测</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E8%A7%84%E5%88%92/%E8%BF%90%E5%8A%A8%E5%AD%A6%E4%BD%8D%E7%BD%AE%E9%A2%84%E6%B5%8B/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/eb1d12c7-8892-4898-b4e0-b494f5f418f0?title=3%E3%80%81%E8%BF%90%E5%8A%A8%E5%AD%A6%E4%BD%8D%E7%BD%AE%E9%A2%84%E6%B5%8B" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/eb1d12c7-8892-4898-b4e0-b494f5f418f0?title=3%E3%80%81%E8%BF%90%E5%8A%A8%E5%AD%A6%E4%BD%8D%E7%BD%AE%E9%A2%84%E6%B5%8B</a></p>
+]]></content>
+      <categories>
+        <category>规划</category>
+      </categories>
+      <tags>
+        <tag>运动学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>前线实验室</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E8%AE%BA%E6%96%87/%E5%89%8D%E7%BA%BF%E5%AE%9E%E9%AA%8C%E5%AE%A4/</url>
+    <content><![CDATA[<p>Automatic Control Laboratory, ETH Zurich：<br><a href="https://control.ee.ethz.ch/" target="_blank" rel="noopener">https://control.ee.ethz.ch/</a></p>
+<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/8f50fb35-2733-422e-9879-acb903d695b2?title=%E5%8C%97%E7%BE%8E%E5%89%8D%E7%BA%BF%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%8E%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6%E5%AE%9E%E9%AA%8C%E5%AE%A4" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/8f50fb35-2733-422e-9879-acb903d695b2?title=%E5%8C%97%E7%BE%8E%E5%89%8D%E7%BA%BF%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%B8%8E%E6%99%BA%E8%83%BD%E9%A9%BE%E9%A9%B6%E5%AE%9E%E9%AA%8C%E5%AE%A4</a></p>
+]]></content>
+      <categories>
+        <category>论文</category>
+        <category>资讯</category>
+      </categories>
+      <tags>
+        <tag>实验室</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>H-inf控制器</title>
+    <url>/2020/03/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%8E%B0%E4%BB%A3%E6%8E%A7%E5%88%B6/H-inf%E6%8E%A7%E5%88%B6%E5%99%A8/</url>
+    <content><![CDATA[<p><a href="https://wenku.baidu.com/view/401a80a5aaea998fcd220e48.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/401a80a5aaea998fcd220e48.html</a></p>
+<p>华科课件：<br><a href="https://wenku.baidu.com/view/53c59b8dcc22bcd126ff0c34.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/53c59b8dcc22bcd126ff0c34.html</a><br><a href="https://wenku.baidu.com/view/36114bd59b89680203d825bf.html?rec_flag=default" target="_blank" rel="noopener">https://wenku.baidu.com/view/36114bd59b89680203d825bf.html?rec_flag=default</a><br><a href="https://wenku.baidu.com/view/6422b5340b4c2e3f5727633a.html?sxts=1584882421496" target="_blank" rel="noopener">https://wenku.baidu.com/view/6422b5340b4c2e3f5727633a.html?sxts=1584882421496</a><br><a href="https://wenku.baidu.com/view/f959996448d7c1c708a1453a.html?rec_flag=default" target="_blank" rel="noopener">https://wenku.baidu.com/view/f959996448d7c1c708a1453a.html?rec_flag=default</a></p>
+<p>bili推导视频:<br><a href="https://www.bilibili.com/video/av79894235?from=search&amp;seid=5165197619440908814" target="_blank" rel="noopener">https://www.bilibili.com/video/av79894235?from=search&amp;seid=5165197619440908814</a></p>
+<p><strong>求解问题和求解过程：</strong><br><a href="https://wenku.baidu.com/view/91364618dcccda38376baf1ffc4ffe473368fddf.html?from=search" target="_blank" rel="noopener">https://wenku.baidu.com/view/91364618dcccda38376baf1ffc4ffe473368fddf.html?from=search</a><br><a href="https://wenku.baidu.com/view/c3f834b2ac51f01dc281e53a580216fc710a5358.html?from=search" target="_blank" rel="noopener">https://wenku.baidu.com/view/c3f834b2ac51f01dc281e53a580216fc710a5358.html?from=search</a></p>
+<p>求解方法：<br><a href="https://wenku.baidu.com/view/0aea1364f5335a8102d220c2.html?from=search" target="_blank" rel="noopener">https://wenku.baidu.com/view/0aea1364f5335a8102d220c2.html?from=search</a><br>RIC（DGKF方法（代数Riccati方程方法））<br>LMI</p>
+<p>控制器设计： *<br><a href="https://wenku.baidu.com/view/c3f834b2ac51f01dc281e53a580216fc710a5358.html?from=search" target="_blank" rel="noopener">https://wenku.baidu.com/view/c3f834b2ac51f01dc281e53a580216fc710a5358.html?from=search</a><br><a href="https://zhuanlan.zhihu.com/p/113223023" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/113223023</a></p>
+<p>m demo:<br><a href="https://blog.csdn.net/jinpeng_cumt/article/details/104997599" target="_blank" rel="noopener">https://blog.csdn.net/jinpeng_cumt/article/details/104997599</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>现代控制</category>
+      </categories>
+      <tags>
+        <tag>h-inf</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo常用指令</title>
+    <url>/2020/04/05/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/hexo/hexo%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/</url>
+    <content><![CDATA[<h4 id="简写指令"><a href="#简写指令" class="headerlink" title="简写指令:"></a>简写指令:</h4><p>hexo n “我的第一篇文章” 等价于 hexo new “我的第一篇文章” 还等价于 hexo new post “我的第一篇文章”<br>hexo p 等价于 hexo publish<br>hexo g 等价于 hexo generate<br>hexo s等价于 hexo server<br>hexo d 等价于 hexo deploy<br>hexo deploy -g 等价于 hexo deploy –generate<br>hexo generate -d等价于hexo generate –deploy</p>
+<p>注: hexo clean 没有 简写, git –version 没有简写</p>
+<h4 id="指令说明"><a href="#指令说明" class="headerlink" title="指令说明:"></a>指令说明:</h4><p>hexo server #Hexo 会监视文件变动并自动更新，除修改站点配置文件外,无须重启服务器,直接刷新网页即可生效。<br>hexo server -s #以静态模式启动<br>hexo server -p 5000 #更改访问端口 (默认端口为4000，’ctrl + c’关闭server)<br>hexo server -i IP地址 #自定义 IP<br>hexo clean #清除缓存 ,网页正常情况下可以忽略此条命令,执行该指令后,会删掉站点根目录下的public文件夹<br>hexo g #生成静态网页 (执行 $ hexo g后会在站点根目录下生成public文件夹, hexo会将”/blog/source/“ 下面的.md后缀的文件编译为.html后缀的文件,存放在”/blog/public/ “ 路径下)<br>hexo d #将本地数据部署到远端服务器(如github)<br>hexo init 文件夹名称 #初始化XX文件夹名称<br>npm update hexo -g#升级<br>npm install hexo -g#安装<br>node-v #查看node.js版本号<br>npm -v #查看npm版本号<br>git –version #查看git版本号<br>hexo -v #查看hexo版本号</p>
+<p>hexo publish [layout] <title> #通过 publish 命令将草稿移动到 source/_posts 文件夹,如:$ hexo publish [layout] <title>,草稿默认是不会显示在页面中的，可在执行时加上 –draft 参数，或是把 render_drafts 参数设为 true来预览草稿。</p>
+<p>hexo new aaa “bbb” # 新建一篇文章,文章名称和标题分别为bbb.md 和 bbb. 文章采用aaa布局, 此时会在站点根目录下的—-&gt;source—–&gt;_post文件夹下生成bbb.md文件, bbb.md文件的顶部(—–分割线上方区域,也称作Front matter区),生成</p>
+<p>layout : aaa<br>title:<br>date:</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>hexo</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>理财知识</title>
+    <url>/2020/04/12/%E7%94%9F%E6%B4%BB/%E7%90%86%E8%B4%A2%E7%9F%A5%E8%AF%86/</url>
+    <content><![CDATA[<p>1.入门-：<br><a href="https://zhuanlan.zhihu.com/p/31426258" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/31426258</a><br><a href="https://www.zhihu.com/question/309474071" target="_blank" rel="noopener">https://www.zhihu.com/question/309474071</a></p>
+<p>2.视频课程-：<br><a href="https://www.icourse163.org/learn/DUT-1002083017?tid=1450232472#/learn/content?type=detail&amp;id=1214418813" target="_blank" rel="noopener">https://www.icourse163.org/learn/DUT-1002083017?tid=1450232472#/learn/content?type=detail&amp;id=1214418813</a><br><a href="https://open.163.com/newview/search/%E7%90%86%E8%B4%A2?type=vip" target="_blank" rel="noopener">https://open.163.com/newview/search/%E7%90%86%E8%B4%A2?type=vip</a></p>
+<p>交际：<br><a href="http://open.163.com/newview/movie/free?pid=M8I8FS8QG&amp;mid=M8IQRPF7G" target="_blank" rel="noopener">http://open.163.com/newview/movie/free?pid=M8I8FS8QG&amp;mid=M8IQRPF7G</a></p>
+<p>贷款：<br><a href="https://zhuanlan.zhihu.com/p/25682207" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/25682207</a></p>
+<p>网站系列：<br><a href="https://www.zhihu.com/question/20068807/answer/1038022789" target="_blank" rel="noopener">https://www.zhihu.com/question/20068807/answer/1038022789</a></p>
+<p>ing:<br><a href="https://zhuanlan.zhihu.com/p/41906188" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/41906188</a><br><a href="https://zhuanlan.zhihu.com/p/35661030" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/35661030</a><br><a href="https://mubu.com/doc/explore/20438" target="_blank" rel="noopener">https://mubu.com/doc/explore/20438</a><br><a href="https://www.zhihu.com/question/21781920/answer/1146449641" target="_blank" rel="noopener">https://www.zhihu.com/question/21781920/answer/1146449641</a><br><a href="https://www.zhihu.com/question/21292832/answer/1149953748" target="_blank" rel="noopener">https://www.zhihu.com/question/21292832/answer/1149953748</a></p>
+<p>收入的40%用于强制储蓄，定投基金或者投资安全靠谱的p2p都可以，实在不行就去银行存定期。收入的30%用于日常消费，包括房租水电吃饭乘车。收入的20%作为备用金，也可以说是零花钱，你想买一点什么东西，社交，或者是生小病了，都可以用这一笔钱。收入的10%用来买保险，最好是买储蓄型保险，这类保险的长处在于，如果你在保险的规定期限内，没有用到保险，你的钱会返一部分给你。</p>
+]]></content>
+      <categories>
+        <category>生活</category>
+        <category>理财</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数据误差评价</title>
+    <url>/2020/04/14/%E6%8A%80%E6%9C%AF/%E6%95%B0%E5%AD%A6/%E6%A6%82%E7%8E%87%E8%AE%BA/%E6%95%B0%E6%8D%AE%E8%AF%AF%E5%B7%AE%E8%AF%84%E4%BB%B7/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/xidiancoder/article/details/71341345" target="_blank" rel="noopener">https://blog.csdn.net/xidiancoder/article/details/71341345</a></p>
+]]></content>
+      <categories>
+        <category>数学</category>
+        <category>概率</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>matlab&amp;control</title>
+    <url>/2020/04/14/%E6%8A%80%E6%9C%AF/%E7%BC%96%E7%A8%8B/matlab/matlab-control/</url>
+    <content><![CDATA[<p>1、符号表达式 sym和syms<br>    sym符号变量不需先声明，syms符号变量需先声明<br>2、solve求解符号代数方程，dsolve求解符号微分方程<br>   diff微分，int积分<br>3、laplace拉普拉斯变化，ilaplace拉普拉斯反变换<br>4、ztrans Z变换，iztrans Z反变换   TODO</p>
+]]></content>
+      <categories>
+        <category>matlab</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>db和rs曲线</title>
+    <url>/2020/04/17/%E6%8A%80%E6%9C%AF/%E8%A7%84%E5%88%92/db%E5%92%8Crs%E6%9B%B2%E7%BA%BF/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/clong139/article/details/83014865?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4&amp;utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4" target="_blank" rel="noopener">https://blog.csdn.net/clong139/article/details/83014865?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4&amp;utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-4</a></p>
+<p><a href="https://blog.csdn.net/qq_34754836/article/details/104884585" target="_blank" rel="noopener">https://blog.csdn.net/qq_34754836/article/details/104884585</a></p>
+<p><a href="http://www.banbeichadexiaojiubei.com/index.php/2020/03/23/%e8%87%aa%e5%8a%a8%e9%a9%be%e9%a9%b6%e8%bf%90%e5%8a%a8%e8%a7%84%e5%88%92-reeds-shepp%e6%9b%b2%e7%ba%bf/" target="_blank" rel="noopener">http://www.banbeichadexiaojiubei.com/index.php/2020/03/23/%e8%87%aa%e5%8a%a8%e9%a9%be%e9%a9%b6%e8%bf%90%e5%8a%a8%e8%a7%84%e5%88%92-reeds-shepp%e6%9b%b2%e7%ba%bf/</a></p>
+]]></content>
+      <categories>
+        <category>规划</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>markdown笔记</title>
+    <url>/2020/05/22/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/markdown/markdown%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p><strong><a href="https://www.jianshu.com/p/191d1e21f7ed/" target="_blank" rel="noopener">https://www.jianshu.com/p/191d1e21f7ed/</a></strong></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>markdown</category>
+      </categories>
+      <tags>
+        <tag>markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>20-采用观测器时的系统控制器的设计</title>
+    <url>/2020/11/22/%E6%8A%80%E6%9C%AF/%E6%8E%A7%E5%88%B6/%E7%A6%BB%E6%95%A3%E6%8E%A7%E5%88%B6/20-%E9%87%87%E7%94%A8%E8%A7%82%E6%B5%8B%E5%99%A8%E6%97%B6%E7%9A%84%E7%B3%BB%E7%BB%9F%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/</url>
+    <content><![CDATA[<p><a href="https://app.yinxiang.com/shard/s69/nl/14902305/8e1c9ce0-878d-43a0-a937-3621f0effa55?title=20%E3%80%81%E9%87%87%E7%94%A8%E8%A7%82%E6%B5%8B%E5%99%A8%E6%97%B6%E7%9A%84%E7%B3%BB%E7%BB%9F%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1" target="_blank" rel="noopener">https://app.yinxiang.com/shard/s69/nl/14902305/8e1c9ce0-878d-43a0-a937-3621f0effa55?title=20%E3%80%81%E9%87%87%E7%94%A8%E8%A7%82%E6%B5%8B%E5%99%A8%E6%97%B6%E7%9A%84%E7%B3%BB%E7%BB%9F%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1</a></p>
+]]></content>
+      <categories>
+        <category>控制</category>
+        <category>离散控制</category>
+      </categories>
+      <tags>
+        <tag>离散控制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>test</title>
+    <url>/2020/11/22/%E6%8A%80%E6%9C%AF/%E7%AE%97%E6%B3%95/README/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>test</tag>
+      </tags>
+  </entry>
+</search>
